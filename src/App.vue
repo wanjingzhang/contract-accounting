@@ -7,6 +7,20 @@
       </div>
       <div class="topbar-right">
         <div class="topbar-right-office">
+          <el-tooltip
+            class="item"
+            effect="dark"
+            content="project status checking"
+            placement="left"
+          >
+            <el-link
+              href="https://kc.test.com/invoiceaspx/australia_search.aspx"
+              target="_blank"
+              type="primary"
+              ><i class="el-icon-suitcase" alt="Office"></i>
+            </el-link>
+          </el-tooltip>
+
           <el-select
             class="no-border"
             v-model="value"
@@ -26,10 +40,14 @@
         <div class="topbar-right-searchbox">
           <el-input
             placeholder="Project name or no."
-            v-model="input3"
+            v-model="searchStr"
             class="searchinput"
           >
-            <el-button slot="append" icon="el-icon-search"></el-button>
+            <el-button
+              slot="append"
+              icon="el-icon-search"
+              @click="SearchHandler"
+            ></el-button>
           </el-input>
         </div>
       </div>
@@ -40,28 +58,80 @@
 
 <script>
 import TabComponent from "./components/Tabs.vue";
+import API from "./data/api.js";
+let load = false;
 
 export default {
   name: "App",
   data: () => {
     return {
-      options: [
-        {
-          value: "Option1",
-          label: "Option1",
-        },
-        {
-          value: "Option2",
-          label: "Option2",
-        },
-      ],
-      value: "a",
-      input3: "",
+      options: [],
+      value: "",
+      options2: [],
+      searchStr: "",
     };
+  },
+  methods: {
+    // 获取全球办公室列表
+    async Offices() {
+      if (load) return;
+      load = true;
+      let data = await API.Offices();
+      let opts = [];
+      for (let i = 0; i < data.length; i++) {
+        opts.push({
+          value: data[i].officeid,
+          label: data[i].officeid,
+        });
+      }
+      this.value = "Shanghai";
+      this.options = opts;
+    },
+    async Managers(str) {
+      let datas = await API.Managers(str);
+      let opt2 = [
+        { label: "Team Leader", options: [] },
+        { label: "Project Leader", options: [] },
+      ];
+      opt2[0].options = [];
+      opt2[1].options = [];
+      for (var i = 0; i < datas[0].length; i++) {
+        opt2[0].options.push({
+          value: datas[0][i]["teamleader"] + "_ProjectDirector",
+          label: datas[0][i]["teamleader"],
+        });
+      }
+      for (var j = 0; j < datas[1].length; j++) {
+        opt2[1].options.push({
+          value: datas[1][j]["projectleader"] + "_ProjectLeader",
+          label: datas[1][j]["projectleader"],
+        });
+      }
+      return opt2;
+    },
+    SearchHandler: async function () {
+      console.log(this.data);
+      let res = await API.Search({
+        strname: this.searchStr,
+        officelocation: this.value,
+        optype: "view",
+      });
+      console.log(res);
+    },
+  },
+  watch: {
+    value: async function () {
+      let opt2 = await this.Managers(this.value);
+      this.options2 = opt2;
+    },
+  },
+  mounted() {
+    this.Offices();
   },
   provide: function () {
     return {
       office: () => this.value,
+      options2: () => this.options2,
     };
   },
   components: {
@@ -78,7 +148,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin: 50px auto;
-  max-width: 1200px;
+  width: 1200px;
   .topbar {
     height: 80px;
     display: flex;

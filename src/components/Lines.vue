@@ -5,10 +5,43 @@
         {{ this.title }}
       </div>
       <div class="rightcontainer-item-left-team">
-        Team <i class="el-icon-warning-outline"></i>
+        <!-- 2 icons -->
+        <el-tooltip
+          v-if="links.Office !== ''"
+          class="item"
+          effect="dark"
+          content="Office"
+          placement="bottom"
+        >
+          <el-link
+            :href="`${links.Office}${this._office}`"
+            target="_blank"
+            type="primary"
+            ><i
+              v-if="links.Office !== ''"
+              class="el-icon-office-building"
+              alt="Office"
+            ></i>
+          </el-link>
+        </el-tooltip>
+        <el-tooltip
+          v-if="links.Teams !== ''"
+          class="item"
+          effect="dark"
+          content="Teams"
+          placement="bottom"
+        >
+          <el-link
+            :href="`${links.Teams}${this._office}`"
+            target="_blank"
+            type="primary"
+          >
+            <i class="el-icon-user" alt="Teams"></i>
+          </el-link>
+        </el-tooltip>
       </div>
     </div>
-    <div v-if="options.length" class="rightcontainer-item-right">
+    <div v-if="type === 'options'" class="rightcontainer-item-right">
       <el-select class="goSelect" v-model="value" placeholder="Select">
         <el-option-group
           v-for="group in options"
@@ -24,10 +57,19 @@
           </el-option>
         </el-option-group>
       </el-select>
-      <el-button class="gobtn" @click="drawer = true" type="info">Go</el-button>
+      <el-button class="gobtn" @click="Goto" type="info">Go</el-button>
     </div>
-    <div v-else-if="supplies.length" class="rightcontainer-item-right">
-      {{ this._office }}
+    <div v-else-if="type === 'supplies'" class="rightcontainer-item-right2">
+      <el-link
+        :href="`https://kc.test.com/invoiceaspx/t_remind_office.aspx?officeid=${this._office}`"
+        target="_blank"
+        >Remind list</el-link
+      >
+      <el-link
+        :href="`https://kc.test.com/invoiceaspx/Supplierlist.aspx?officeid=${this._office}`"
+        target="_blank"
+        >Supplier List</el-link
+      >
     </div>
   </div>
 </template>
@@ -43,7 +85,8 @@ export default {
   },
   props: {
     title: String,
-    links: String,
+    links: Object,
+    type: String, // options,supplies
     options: Array,
     supplies: Array,
   },
@@ -52,8 +95,22 @@ export default {
       return this.office();
     },
   },
-  mounted() {
-    console.log(this.office); // undefined
+  watch: {
+    _office() {
+      this.value = "";
+    },
+  },
+  methods: {
+    Goto() {
+      // 确定name,type 然后跳转相应的链接
+      if (this.value !== "") {
+        let [name, type] = this.value.split("_");
+        window.open(
+          `${this.links[type]}${name}&officeid=${this._office}`,
+          "_blank"
+        );
+      }
+    },
   },
 };
 </script>
@@ -72,10 +129,18 @@ export default {
     &-team {
       color: var(--light-blue);
       line-height: 22px;
+      i {
+        margin: 4px 4px 0;
+      }
     }
   }
   &-right {
     display: flex;
+  }
+  &-right2 {
+    display: flex;
+    justify-content: space-between;
+    width: 200px;
   }
 }
 

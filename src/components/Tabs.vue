@@ -36,34 +36,70 @@
       <div v-show="id === 0" class="rightcontainer-box">
         <TabLineComponent
           title="Contract Accounting with Client Status"
-          :options="options2"
+          type="options"
+          :options="this._options2"
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/project_account_status.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/project_account_status_teaminfo.aspx?officeid=',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/project_account_status_byteam.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/project_account_status_bydirector.aspx?director=',
+          }"
         />
-        <TabLineComponent
+
+        <!--
+           <TabLineComponent
           title="Contract Accounting with Client/ Vendors Status"
-          :options="options2"
-        />
+          type="options"
+          :options="this._options2"
+          :team="[
+            'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_byteam.aspx?teamleader=AmosZheng&officeid=Shanghai',
+            'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_bydirector.aspx?officeid=Shanghai&director=DickMak'
+        ]"/>
         <TabLineComponent
           title="Outstanding Accounts Receivable (AR)"
-          :options="options2"
+          type="options"
+          :options="this._options2"
+          team="https://kc.test.com/invoiceaspx/Summary_receivebyprojno_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
         />
-        <TabLineComponent title="Client Aging" :options="options2" />
+        <TabLineComponent
+          title="Client Aging"
+          type="options"
+          :options="this._options2"
+          team="https://kc.test.com/invoiceaspx/Teaminfo_aging_global.aspx"
+        /> -->
       </div>
       <div v-show="id === 1" class="rightcontainer-box">
-        <TabLineComponent
+        <!-- <TabLineComponent
           title="Overdue Invoice Issuance"
-          :options="options2"
+          type="options"
+          :options="this._options2"
+          team="https://kc.test.com/invoiceaspx/forecast_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
         />
         <TabLineComponent
           title="Overdue Accounts Receivable (AR) "
-          :options="options2"
+          type="options"
+          :options="this._options2"
         />
         <TabLineComponent
-          title="Overdue Accounts Receivable (AR) "
-          :options="[]"
+          title="Overdue Contract Financial Status Report"
+          type="supplies"
           :supplies="['', '']"
+          team="https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
         />
+       -->
       </div>
-      <div v-show="id === 2" class="rightcontainer-box">tab2</div>
+      <div v-show="id === 2" class="rightcontainer-box">
+        <!-- <TabLineComponent
+          title="Overdue Contract Financial Status Report"
+          type="supplies"
+          :supplies="['', '']"
+          team="https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
+        /> -->
+      </div>
       <div v-show="id === 3" class="rightcontainer-box">tab3</div>
       <div v-show="id === 4" class="rightcontainer-box">tab4</div>
     </div>
@@ -74,48 +110,18 @@
 import TabLineComponent from "./Lines.vue";
 export default {
   name: "TabComponent",
+  inject: ["options2"],
   data: () => {
     return {
       visible: false,
       id: 0,
-      options2: [
-        {
-          label: "Popular cities",
-          options: [
-            {
-              value: "Shanghai",
-              label: "Shanghai",
-            },
-            {
-              value: "Beijing",
-              label: "Beijing",
-            },
-          ],
-        },
-        {
-          label: "City name",
-          options: [
-            {
-              value: "Chengdu",
-              label: "Chengdu",
-            },
-            {
-              value: "Shenzhen",
-              label: "Shenzhen",
-            },
-            {
-              value: "Guangzhou",
-              label: "Guangzhou",
-            },
-            {
-              value: "Dalian",
-              label: "Dalian",
-            },
-          ],
-        },
-      ],
       value2: "",
     };
+  },
+  computed: {
+    _options2() {
+      return this.options2();
+    },
   },
   methods: {
     changeId(newId) {
