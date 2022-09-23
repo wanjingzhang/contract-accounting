@@ -114,59 +114,61 @@ export default {
       }
       return opt2;
     },
-    async Eapproval(str) {
-      let datas = await API.Eapproval(str);
-      let opt3 = [
-        { label: "PO AP1", options: [] },
-        { label: "PO AP2", options: [] },
-        { label: "PO GW", options: [] },
-      ];
-      for (var i = 0; i < datas[0].length; i++) {
-        opt3[0].options.push({
-          value: datas[0][i]["po_ap_1"] + "_POAP1",
-          label: datas[0][i]["po_ap_1"],
-        });
-      }
-      for (var j = 0; j < datas[1].length; j++) {
-        opt3[1].options.push({
-          value: datas[1][j]["po_ap_2"] + "_POAP2",
-          label: datas[1][j]["po_ap_2"],
-        });
-      }
-      for (var k = 0; k < datas[2].length; k++) {
-        opt3[2].options.push({
-          value: datas[2][k]["po_gw_1"] + "_POGW",
-          label: datas[2][k]["po_gw_1"],
-        });
-      }
-      return opt3;
+    Eapproval(str) {
+      API.Eapproval(str, (datas) => {
+        let opt3 = [
+          { label: "PO AP1", options: [] },
+          { label: "PO AP2", options: [] },
+          { label: "PO GW", options: [] },
+        ];
+        for (var i = 0; i < datas[0].length; i++) {
+          opt3[0].options.push({
+            value: datas[0][i]["po_ap_1"] + "_POAP1",
+            label: datas[0][i]["po_ap_1"],
+          });
+        }
+        for (var j = 0; j < datas[1].length; j++) {
+          opt3[1].options.push({
+            value: datas[1][j]["po_ap_2"] + "_POAP2",
+            label: datas[1][j]["po_ap_2"],
+          });
+        }
+        for (var k = 0; k < datas[2].length; k++) {
+          opt3[2].options.push({
+            value: datas[2][k]["po_gw_1"] + "_POGW",
+            label: datas[2][k]["po_gw_1"],
+          });
+        }
+        this.options3 = opt3;
+      });
     },
-    async Payment(str) {
-      let datas = await API.Payment(str);
-      let opt4 = [
-        { label: "PO AP1", options: [] },
-        { label: "PO AP2", options: [] },
-        { label: "PO GW", options: [] },
-      ];
-      for (var i = 0; i < datas[0].length; i++) {
-        opt4[0].options.push({
-          value: datas[0][i]["po_ap_1"] + "_POAP1",
-          label: datas[0][i]["po_ap_1"],
-        });
-      }
-      for (var j = 0; j < datas[1].length; j++) {
-        opt4[1].options.push({
-          value: datas[1][j]["po_ap_2"] + "_POAP2",
-          label: datas[1][j]["po_ap_2"],
-        });
-      }
-      for (var k = 0; k < datas[2].length; k++) {
-        opt4[2].options.push({
-          value: datas[2][k]["po_ap_3"] + "_POGW",
-          label: datas[2][k]["po_ap_3"],
-        });
-      }
-      return opt4;
+    Payment(str) {
+      API.Payment(str, (datas) => {
+        let opt4 = [
+          { label: "PO AP1", options: [] },
+          { label: "PO AP2", options: [] },
+          { label: "PO GW", options: [] },
+        ];
+        for (var i = 0; i < datas[0].length; i++) {
+          opt4[0].options.push({
+            value: datas[0][i]["po_ap_1"] + "_POAP1",
+            label: datas[0][i]["po_ap_1"],
+          });
+        }
+        for (var j = 0; j < datas[1].length; j++) {
+          opt4[1].options.push({
+            value: datas[1][j]["po_ap_2"] + "_POAP2",
+            label: datas[1][j]["po_ap_2"],
+          });
+        }
+        for (var k = 0; k < datas[2].length; k++) {
+          opt4[2].options.push({
+            value: datas[2][k]["po_ap_3"] + "_POGW",
+            label: datas[2][k]["po_ap_3"],
+          });
+        }
+        this.options4 = opt4;
+      });
     },
     SearchHandler: async function () {
       console.log(this.data);
@@ -184,13 +186,12 @@ export default {
       // 1. 获取管理员列表
       let opt2 = await this.Managers(this.value);
       this.options2 = opt2;
-      // 2. 获取E-approval
-      let opt3 = await this.Eapproval(this.value);
-      this.options3 = opt3;
-      // 2. 获取E-approval
-      let opt4 = await this.Payment(this.value);
-      this.options4 = opt4;
       loadingInstance.close();
+
+      // 2. 获取E-approval
+      this.Eapproval(this.value);
+      // 3. 获取E-approval
+      this.Payment(this.value);
     },
   },
   mounted() {

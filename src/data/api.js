@@ -58,18 +58,18 @@ API.Managers = async (str) => {
   return [res1, res2];
 };
 // 3. E-approval list
-API.Eapproval = async (str) => {
+API.Eapproval = async (str, callback) => {
   const { data: res1 } = await axios.get(`/api/poap1/${str}`);
   const { data: res2 } = await axios.get(`/api/poap2/${str}`);
   const { data: res3 } = await axios.get(`/api/pogw1/${str}`);
-  return [res1, res2, res3];
+  callback([res1, res2, res3]);
 };
 // 4. Payment request approval list
-API.Payment = async (str) => {
+API.Payment = async (str, callback) => {
   const { data: res1 } = await axios.get(`/api/porq1/${str}`);
   const { data: res2 } = await axios.get(`/api/porq2/${str}`);
   const { data: res3 } = await axios.get(`/api/porq3/${str}`);
-  return [res1, res2, res3];
+  callback([res1, res2, res3]);
 };
 // 5. 搜索项目
 // projectsearch.aspx;  包含 strname = 搜索内容， officelocation = 搜索哪个office, optype= view (只查看)
