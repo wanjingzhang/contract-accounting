@@ -97,13 +97,13 @@ export default {
       opt2[1].options = [];
       for (var i = 0; i < datas[0].length; i++) {
         opt2[0].options.push({
-          value: datas[0][i]["teamleader"] + "_ProjectDirector",
+          value: datas[0][i]["teamleader"] + "_ProjectLeader",
           label: datas[0][i]["teamleader"],
         });
       }
       for (var j = 0; j < datas[1].length; j++) {
         opt2[1].options.push({
-          value: datas[1][j]["projectleader"] + "_ProjectLeader",
+          value: datas[1][j]["projectleader"] + "_ProjectDirector",
           label: datas[1][j]["projectleader"],
         });
       }

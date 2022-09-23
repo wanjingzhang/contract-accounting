@@ -2,9 +2,9 @@
 import axios from "axios";
 import { Loading } from "element-ui";
 // 2、配置请求根路径
-// axios.defaults.baseURL = 'https://www.escook.cn'
 // axios.defaults.baseURL = "https://kcapi.test.com";
-axios.defaults.baseURL = "http://localhost:8080";
+// axios.defaults.baseURL = "https://kc.test.com";
+// axios.defaults.baseURL = "http://localhost:8080";
 
 const API = {};
 
@@ -30,6 +30,7 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
+    loadingInstance.close();
     console.log(error.response);
     if (error.response) {
       if (error.response.status == 401) {
@@ -43,7 +44,7 @@ axios.interceptors.response.use(
         console.log("错误");
       }
     }
-    // return error.response.data;
+    return { data: [] };
   }
 );
 // 1. 获取office列表
@@ -65,7 +66,10 @@ API.Managers = async (str) => {
 // projectsearch.aspx;  包含 strname = 搜索内容， officelocation = 搜索哪个office, optype= view (只查看)
 API.Search = async (data) => {
   console.log(data); //, data
-  const { data: res } = await axios.get("/invoiceaspx/invoiceoffice");
+  const { data: res } = await axios.post(
+    "/invoiceaspx/projectsearch.aspx",
+    data
+  );
   return res;
 };
 

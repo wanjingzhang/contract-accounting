@@ -32,7 +32,7 @@
           placement="bottom"
         >
           <el-link
-            :href="`${links.Teams}${this._office}`"
+            :href="`${links.Teams}${this._office}&teaminfo=${this._office}%20Team%201`"
             target="_blank"
             type="primary"
           >
@@ -41,6 +41,7 @@
         </el-tooltip>
       </div>
     </div>
+    <!-- 1. 带有选项的右侧 -->
     <div v-if="type === 'options'" class="rightcontainer-item-right">
       <el-select class="goSelect" v-model="value" placeholder="Select">
         <el-option-group
@@ -59,18 +60,25 @@
       </el-select>
       <el-button class="gobtn" @click="Goto" type="info">Go</el-button>
     </div>
+    <!-- 2. 带有链接的右侧 -->
     <div v-else-if="type === 'supplies'" class="rightcontainer-item-right2">
       <el-link
-        :href="`https://kc.test.com/invoiceaspx/t_remind_office.aspx?officeid=${this._office}`"
+        v-if="links.RemindList !== ''"
+        type="primary"
+        :href="`${links.RemindList}${this._office}`"
         target="_blank"
         >Remind list</el-link
       >
       <el-link
-        :href="`https://kc.test.com/invoiceaspx/Supplierlist.aspx?officeid=${this._office}`"
+        v-if="links.SupplierList !== ''"
+        type="primary"
+        :href="`${links.SupplierList}${this._office}`"
         target="_blank"
         >Supplier List</el-link
       >
     </div>
+    <!-- 3. 空白的右侧 -->
+    <div v-else-if="type === 'blank'" class="rightcontainer-item-right3"></div>
   </div>
 </template>
 
@@ -105,6 +113,7 @@ export default {
       // 确定name,type 然后跳转相应的链接
       if (this.value !== "") {
         let [name, type] = this.value.split("_");
+        console.log(type);
         window.open(
           `${this.links[type]}${name}&officeid=${this._office}`,
           "_blank"

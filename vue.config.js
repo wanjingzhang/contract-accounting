@@ -11,7 +11,7 @@ module.exports = defineConfig({
         changeOrigin: true,
       },
       "/invoiceaspx": {
-        target: "https://kcapi.test.com",
+        target: "https://kc.test.com",
         ws: true,
         changeOrigin: true,
       },

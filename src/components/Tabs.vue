@@ -34,6 +34,7 @@
     </div>
     <div class="rightcontainer">
       <div v-show="id === 0" class="rightcontainer-box">
+        <!-- Tab 1-1 -->
         <TabLineComponent
           title="Contract Accounting with Client Status"
           type="options"
@@ -47,58 +48,168 @@
               'https://kc.test.com/invoiceaspx/project_account_status_byteam.aspx?teamleader=',
             ProjectDirector:
               'https://kc.test.com/invoiceaspx/project_account_status_bydirector.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
           }"
         />
-
-        <!--
-           <TabLineComponent
+        <!-- Tab 1-2 -->
+        <TabLineComponent
           title="Contract Accounting with Client/ Vendors Status"
           type="options"
           :options="this._options2"
-          :team="[
-            'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_byteam.aspx?teamleader=AmosZheng&officeid=Shanghai',
-            'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_bydirector.aspx?officeid=Shanghai&director=DickMak'
-        ]"/>
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_1.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_teaminfo.aspx?officeid=',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_byteam.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_bydirector.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
+          }"
+        />
+        <!-- Tab 1-3 -->
         <TabLineComponent
           title="Outstanding Accounts Receivable (AR)"
           type="options"
           :options="this._options2"
-          team="https://kc.test.com/invoiceaspx/Summary_receivebyprojno_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/Summary_receivebyprojno_1.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/Summary_receivebyprojno_teaminfo.aspx?officeid=',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/Summary_receivebyprojnobyteam.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/Summary_receivebyprojnobydirector.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
+          }"
         />
+
+        <!-- Tab 1-4 -->
         <TabLineComponent
           title="Client Aging"
           type="options"
           :options="this._options2"
-          team="https://kc.test.com/invoiceaspx/Teaminfo_aging_global.aspx"
-        /> -->
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/ClientAgingReport_byOffice_1.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/Teaminfo_aging_global.aspx?',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/ClientAgingReport_byteam.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/ClientAgingReport_bydirector.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
+          }"
+        />
+        <!-- Tab 5 forecast 预测 暂时不要 -->
       </div>
       <div v-show="id === 1" class="rightcontainer-box">
-        <!-- <TabLineComponent
+        <!-- Tab 2-1 -->
+        <TabLineComponent
           title="Overdue Invoice Issuance"
           type="options"
           :options="this._options2"
-          team="https://kc.test.com/invoiceaspx/forecast_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
+          :links="{
+            Office: 'https://kc.test.com/invoiceaspx/forecast_1.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/forecast_teaminfo.aspx?officeid=',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/forecastteam_1.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/forecastdirector_1.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
+          }"
         />
+        <!-- Tab 2-2 -->
         <TabLineComponent
           title="Overdue Accounts Receivable (AR) "
           type="options"
           :options="this._options2"
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/OSreceive_1.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?officeid=',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/OSreceiveteam_1.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/OSreceivedirector_1.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
+          }"
         />
+        <!-- Tab 2-3 -->
         <TabLineComponent
           title="Overdue Contract Financial Status Report"
           type="supplies"
-          :supplies="['', '']"
-          team="https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
+          :options="this._options2"
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/overdue_report_sin.aspx?officeid=',
+            RemindList:
+              'https://kc.test.com/invoiceaspx/t_remind_office.aspx?officeid=',
+            SupplierList:
+              'https://kc.test.com/invoiceaspx/Supplierlist.aspx?officeid=',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+          }"
         />
-       -->
       </div>
       <div v-show="id === 2" class="rightcontainer-box">
-        <!-- <TabLineComponent
-          title="Overdue Contract Financial Status Report"
-          type="supplies"
-          :supplies="['', '']"
-          team="https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?officeid=Shanghai&teaminfo=Shanghai%20Team%201"
-        /> -->
+        <!-- Tab 3-1 -->
+        <TabLineComponent
+          title="Invoice scheduling Check List"
+          type="options"
+          :options="this._options2"
+          :links="{
+            Office: 'https://kc.test.com/invoiceaspx/pcaccount.aspx?officeid=',
+            Teams:
+              'https://kc.test.com/invoiceaspx/PCAccount_teaminfo.aspx?officeid=',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/pcaccount_byteam.aspx?teamleader=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/pcaccount_bydirector.aspx?director=',
+            RemindList: '',
+            SupplierList: '',
+          }"
+        />
+        <!-- Tab 3-2 -->
+        <TabLineComponent
+          title="Refundable Deposits"
+          type="options"
+          :options="this._options2"
+          :links="{
+            Office: 'https://kc.test.com/invoiceaspx/deposit.aspx?officeid=',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+          }"
+        />
+        <!-- Tab 3-3 -->
+        <TabLineComponent
+          title="No transaction record projects"
+          type="blank"
+          :options="this._options2"
+          :links="{
+            Office:
+              'https://kc.test.com/invoiceaspx/notransaction_project.aspx?officeid=',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+          }"
+        />
       </div>
       <div v-show="id === 3" class="rightcontainer-box">tab3</div>
       <div v-show="id === 4" class="rightcontainer-box">tab4</div>
