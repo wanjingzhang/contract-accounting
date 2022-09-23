@@ -50,6 +50,10 @@
               'https://kc.test.com/invoiceaspx/project_account_status_bydirector.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 1-2 -->
@@ -68,6 +72,10 @@
               'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_bydirector.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 1-3 -->
@@ -86,6 +94,10 @@
               'https://kc.test.com/invoiceaspx/Summary_receivebyprojnobydirector.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
 
@@ -105,6 +117,10 @@
               'https://kc.test.com/invoiceaspx/ClientAgingReport_bydirector.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 5 forecast 预测 暂时不要 -->
@@ -125,6 +141,10 @@
               'https://kc.test.com/invoiceaspx/forecastdirector_1.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 2-2 -->
@@ -143,6 +163,10 @@
               'https://kc.test.com/invoiceaspx/OSreceivedirector_1.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 2-3 -->
@@ -160,6 +184,10 @@
             Teams: '',
             ProjectLeader: '',
             ProjectDirector: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
       </div>
@@ -179,6 +207,10 @@
               'https://kc.test.com/invoiceaspx/pcaccount_bydirector.aspx?director=',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 3-2 -->
@@ -193,6 +225,10 @@
             ProjectDirector: '',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
         <!-- Tab 3-3 -->
@@ -208,10 +244,63 @@
             ProjectDirector: '',
             RemindList: '',
             SupplierList: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
           }"
         />
       </div>
-      <div v-show="id === 3" class="rightcontainer-box">tab3</div>
+      <div v-show="id === 3" class="rightcontainer-box">
+        <!-- Tab 4-1 -->
+        <TabLineComponent
+          title="PO approval list"
+          type="options"
+          :options="this._options3"
+          :links="{
+            Office: '',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+            POAP1:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_ap_1.aspx?person=',
+            POAP2:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_ap_2.aspx?person=',
+            POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_gw.aspx?person=',
+            PORegist:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_register.aspx?officeid=',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
+          }"
+        />
+        <TabLineComponent
+          title="Payment request approval list"
+          type="options"
+          :options="this._options4"
+          :links="{
+            Office: '',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+            POAP1:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_1.aspx?person=',
+            POAP2:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_2.aspx?person=',
+            POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3.aspx?person=',
+            PORegist: '',
+            Taipei:
+              'https://kc.test.com/invoiceaspx/po_approve_tp/po_rq_2_forpay.aspx?officeid=',
+            CHN: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3_forpay.aspx?officeid=',
+            ApplyPayment:
+              'https://kc.test.com/invoiceaspx/supplierpo_uploaded_applypayment.aspx?officeid=',
+          }"
+        />
+      </div>
       <div v-show="id === 4" class="rightcontainer-box">tab4</div>
     </div>
   </div>
@@ -221,7 +310,7 @@
 import TabLineComponent from "./Lines.vue";
 export default {
   name: "TabComponent",
-  inject: ["options2"],
+  inject: ["options2", "options3", "options4"],
   data: () => {
     return {
       visible: false,
@@ -232,6 +321,12 @@ export default {
   computed: {
     _options2() {
       return this.options2();
+    },
+    _options3() {
+      return this.options3();
+    },
+    _options4() {
+      return this.options4();
     },
   },
   methods: {

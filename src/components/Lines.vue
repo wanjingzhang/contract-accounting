@@ -5,7 +5,8 @@
         {{ this.title }}
       </div>
       <div class="rightcontainer-item-left-team">
-        <!-- 2 icons -->
+        <!-- 3 icons -->
+        <!-- 1. Office -->
         <el-tooltip
           v-if="links.Office !== ''"
           class="item"
@@ -24,6 +25,7 @@
             ></i>
           </el-link>
         </el-tooltip>
+        <!-- 2. Teams -->
         <el-tooltip
           v-if="links.Teams !== ''"
           class="item"
@@ -37,6 +39,70 @@
             type="primary"
           >
             <i class="el-icon-user" alt="Teams"></i>
+          </el-link>
+        </el-tooltip>
+        <!-- 3. PO Regist -->
+        <el-tooltip
+          v-if="links.PORegist !== ''"
+          class="item"
+          effect="dark"
+          content="PO register(Accs only)"
+          placement="bottom"
+        >
+          <el-link
+            :href="`${links.PORegist}${this._office}`"
+            target="_blank"
+            type="primary"
+          >
+            <i class="el-icon-view" alt="PO register(Accs only)"></i>
+          </el-link>
+        </el-tooltip>
+        <!-- 4. Taipei -->
+        <el-tooltip
+          v-if="links.Taipei !== ''"
+          class="item"
+          effect="dark"
+          content="Taipei/India Pay"
+          placement="bottom"
+        >
+          <el-link
+            :href="`${links.Taipei}${this._office}`"
+            target="_blank"
+            type="primary"
+          >
+            <i class="el-icon-magic-stick" alt="Taipei/India Pay"></i>
+          </el-link>
+        </el-tooltip>
+        <!-- 5. CHN(HK) Pay -->
+        <el-tooltip
+          v-if="links.CHN !== ''"
+          class="item"
+          effect="dark"
+          content="CHN(HK) Pay"
+          placement="bottom"
+        >
+          <el-link
+            :href="`${links.CHN}${this._office}`"
+            target="_blank"
+            type="primary"
+          >
+            <i class="el-icon-help" alt="CHN(HK) Pay"></i>
+          </el-link>
+        </el-tooltip>
+        <!-- 6. Apply payment -->
+        <el-tooltip
+          v-if="links.ApplyPayment !== ''"
+          class="item"
+          effect="dark"
+          content="Apply payment"
+          placement="bottom"
+        >
+          <el-link
+            :href="`${links.ApplyPayment}${this._office}`"
+            target="_blank"
+            type="primary"
+          >
+            <i class="el-icon-finished" alt="Apply payment"></i>
           </el-link>
         </el-tooltip>
       </div>
