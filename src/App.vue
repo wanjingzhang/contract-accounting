@@ -73,6 +73,7 @@ export default {
       options2: [], // Project Leader & Director
       options3: [], // E approval PO 1 & PO 2 & GW
       options4: [], // E approval Payment PO 1 & PO 2 & GW
+      options5: [], // forecast
       searchStr: "",
     };
   },
@@ -148,6 +149,7 @@ export default {
           { label: "PO AP1", options: [] },
           { label: "PO AP2", options: [] },
           { label: "PO GW", options: [] },
+          { label: "PO Check", options: [] },
         ];
         for (var i = 0; i < datas[0].length; i++) {
           opt4[0].options.push({
@@ -167,10 +169,65 @@ export default {
             label: datas[2][k]["po_ap_3"],
           });
         }
+        for (var l = 0; l < datas[3].length; l++) {
+          opt4[3].options.push({
+            value: datas[3][l]["po_gw_1"] + "_POCheck",
+            label: datas[3][l]["po_gw_1"],
+          });
+        }
         this.options4 = opt4;
       });
     },
-    SearchHandler: () => {
+    ForecastList: function () {
+      let opt5 = [{ label: "By Team", options: [] }];
+      let array = [
+        {
+          label: "SHA",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfo_list.aspx",
+        },
+        {
+          label: "BJG",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfobj_list.aspx",
+        },
+        {
+          label: "TPE",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfotp_list.aspx",
+        },
+        {
+          label: "SIN",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfosg_list.aspx",
+        },
+        {
+          label: "India",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfoindia_list.aspx",
+        },
+        {
+          label: "Toronto",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfotoronto_list.aspx",
+        },
+        {
+          label: "Vancouver",
+          value: "https://kcapp.test.com/invoiceaspx/Teaminfovan_list.aspx",
+        },
+        {
+          label: "Raleigh",
+          value: "https://kcapp.test.com/invoiceaspx/TeaminfoRaleigh_list.aspx",
+        },
+        {
+          label: "Denver",
+          value: "https://kcapp.test.com/invoiceaspx/TeaminfoDenver_list.aspx",
+        },
+        {
+          label: "SF",
+          value: "https://kc.test.com/invoiceaspx/TeaminfoSF_list.aspx",
+        },
+      ];
+      for (let i = 0; i < array.length; i++) {
+        opt5[0].options.push(array[i]);
+      }
+      this.options5 = opt5;
+    },
+    SearchHandler: function () {
       window.open(
         `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this.value}&optype=view&strname=${this.searchStr}`,
         "_blank"
@@ -189,6 +246,9 @@ export default {
       this.Eapproval(this.value);
       // 3. 获取E-approval
       this.Payment(this.value);
+
+      // 4. 获取options
+      this.ForecastList();
     },
   },
   mounted() {
@@ -200,6 +260,7 @@ export default {
       options2: () => this.options2,
       options3: () => this.options3,
       options4: () => this.options4,
+      options5: () => this.options5,
     };
   },
   components: {

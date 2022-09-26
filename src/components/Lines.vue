@@ -59,7 +59,10 @@
         </el-tooltip>
         <!-- 4. Taipei -->
         <el-tooltip
-          v-if="links.Taipei !== ''"
+          v-if="
+            links.Taipei !== '' &&
+            this.TaipeiIndiaPay.indexOf(this._office) > -1
+          "
           class="item"
           effect="dark"
           content="Taipei/India Pay"
@@ -75,7 +78,7 @@
         </el-tooltip>
         <!-- 5. CHN(HK) Pay -->
         <el-tooltip
-          v-if="links.CHN !== ''"
+          v-if="links.CHN !== '' && this.CNHK.indexOf(this._office) > -1"
           class="item"
           effect="dark"
           content="CHN(HK) Pay"
@@ -91,7 +94,10 @@
         </el-tooltip>
         <!-- 6. Apply payment -->
         <el-tooltip
-          v-if="links.ApplyPayment !== ''"
+          v-if="
+            links.ApplyPayment !== '' &&
+            this.ApplyPay.indexOf(this._office) > -1
+          "
           class="item"
           effect="dark"
           content="Apply payment"
@@ -103,6 +109,18 @@
             type="primary"
           >
             <i class="el-icon-finished" alt="Apply payment"></i>
+          </el-link>
+        </el-tooltip>
+        <!-- 7. CS Project Info -->
+        <el-tooltip
+          v-if="links.CSProject !== ''"
+          class="item"
+          effect="dark"
+          content="CS Project Info"
+          placement="bottom"
+        >
+          <el-link :href="`${links.CSProject}`" target="_blank" type="primary">
+            <i class="el-icon-finished" alt="CS Project Info"></i>
           </el-link>
         </el-tooltip>
       </div>
@@ -145,6 +163,23 @@
     </div>
     <!-- 3. 空白的右侧 -->
     <div v-else-if="type === 'blank'" class="rightcontainer-item-right3"></div>
+    <!-- 4. 带有搜索的右侧 -->
+    <div v-else-if="type === 'search'" class="rightcontainer-item-right4">
+      <div class="topbar-right-searchbox" title="Update Project Info">
+        <el-input
+          placeholder="Project name or no."
+          v-model="searchStr"
+          class="searchinput"
+        >
+          <el-button
+            slot="append"
+            icon="el-icon-edit-outline"
+            type="info"
+            @click="SearchHandler"
+          ></el-button>
+        </el-input>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -155,6 +190,20 @@ export default {
   data: () => {
     return {
       value: "",
+      TaipeiIndiaPay: ["Taipei", "Delhi", "Bangalore", "Mumbai", "Hyderabad"],
+      CNHK: [
+        "Beijing",
+        "Chengdu",
+        "Guangzhou",
+        "Hangzhou",
+        "Shanghai",
+        "Shenzhen",
+        "HongKong",
+        "Singapore",
+        "Taipei",
+      ],
+      ApplyPay: ["Taipei"],
+      searchStr: "",
     };
   },
   props: {
@@ -177,14 +226,20 @@ export default {
   methods: {
     Goto() {
       // 确定name,type 然后跳转相应的链接
-      if (this.value !== "") {
+      if (this.value !== "" && this.value.indexOf("https:") < 0) {
         let [name, type] = this.value.split("_");
-        console.log(type);
-        window.open(
-          `${this.links[type]}${name}&officeid=${this._office}`,
-          "_blank"
-        );
+        let url = `${this.links[type]}${name}&officeid=${this._office}`;
+        window.open(url, "_blank");
+      } else {
+        let url = `${this.value}`;
+        window.open(url, "_blank");
       }
+    },
+    SearchHandler() {
+      window.open(
+        `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this._office}&optype=operate&strname=${this.searchStr}`,
+        "_blank"
+      );
     },
   },
 };
@@ -216,6 +271,15 @@ export default {
     display: flex;
     justify-content: space-between;
     width: 200px;
+  }
+  &-right4 {
+    .searchinput {
+      :deep(.el-input-group__append) {
+        background: #909399;
+        color: #ffffff;
+      }
+      width: 322px;
+    }
   }
 }
 

@@ -7,7 +7,6 @@ import axios from "axios";
 // axios.defaults.baseURL = "http://localhost:8080";
 
 const API = {};
-
 // 配置请求拦截器
 axios.interceptors.request.use((config) => {
   // 调用Loading组件的service()方法，创建Loading组件的实例，并全屏展示 loading 效果
@@ -69,18 +68,9 @@ API.Payment = async (str, callback) => {
   const { data: res1 } = await axios.get(`/dbapi/api/porq1/${str}`);
   const { data: res2 } = await axios.get(`/dbapi/api/porq2/${str}`);
   const { data: res3 } = await axios.get(`/dbapi/api/porq3/${str}`);
-  callback([res1, res2, res3]);
-};
-// 5. 搜索项目
-// projectsearch.aspx;  包含 strname = 搜索内容， officelocation = 搜索哪个office, optype= view (只查看)
-API.Search = async (data) => {
-  console.log(data); //, data
-  const { data: res } = await axios.post(
-    "/invoiceaspx/projectsearch.aspx",
-    data
-  );
-  return res;
+  const { data: res4 } = await axios.get(`/dbapi/api/pogw1/${str}`);
+  callback([res1, res2, res3, res4]);
 };
 
-// 向外暴露 request
+// 向外暴露 API
 export default API;

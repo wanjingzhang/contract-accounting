@@ -66,6 +66,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 1-2 -->
@@ -88,6 +89,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 1-3 -->
@@ -110,6 +112,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
 
@@ -133,6 +136,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 5 forecast 预测 暂时不要 -->
@@ -157,6 +161,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 2-2 -->
@@ -179,6 +184,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 2-3 -->
@@ -200,6 +206,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
       </div>
@@ -223,6 +230,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 3-2 -->
@@ -241,6 +249,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <!-- Tab 3-3 -->
@@ -260,6 +269,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
       </div>
@@ -286,6 +296,7 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
+            CSProject: '',
           }"
         />
         <TabLineComponent
@@ -304,16 +315,96 @@
             POAP2:
               'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_2.aspx?person=',
             POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3.aspx?person=',
+            POCheck:
+              'https://kcapp.test.com/invoiceaspx/supplierpo_uploaded_check.aspx?gw=',
             PORegist: '',
             Taipei:
               'https://kc.test.com/invoiceaspx/po_approve_tp/po_rq_2_forpay.aspx?officeid=',
             CHN: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3_forpay.aspx?officeid=',
             ApplyPayment:
               'https://kc.test.com/invoiceaspx/supplierpo_uploaded_applypayment.aspx?officeid=',
+            CSProject: '',
           }"
         />
       </div>
-      <div v-show="id === 4" class="rightcontainer-box">tab4</div>
+      <div v-show="id === 4" class="rightcontainer-box">
+        <!-- Tab 4-1 updating the project info -->
+        <TabLineComponent
+          title="Contract Accounting Document"
+          type="search"
+          :options="[]"
+          :links="{
+            Office: '',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+            POAP1: '',
+            POAP2: '',
+            POGW: '',
+            POCheck: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
+            CSProject: '',
+          }"
+        />
+        <TabLineComponent
+          title="Forecast"
+          type="options"
+          :options="this._options5"
+          :links="{
+            Office:
+              'https://kcapp.test.com/invoiceaspx/MonthlyForecast/Mostlikely_byoffice.aspx?officeid=',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+            POAP1: '',
+            POAP2: '',
+            POGW: '',
+            POCheck: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
+            CSProject: '',
+          }"
+        />
+        <TabLineComponent
+          title="Forecast (HK+GZ+SZ team)"
+          type="options"
+          :options="this._options4"
+          :links="{
+            Office: '',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+            POAP1: '',
+            POAP2: '',
+            POGW: '',
+            POCheck: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
+            CSProject:
+              'https://kcapp.test.com/invoiceaspx/cs_project_list.aspx',
+          }"
+        />
+      </div>
+      <div class="SearchBox abRB">
+        <el-link
+          :href="`https://kcapp.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this._office}`"
+          target="_blank"
+          ><el-button type="primary" plain>Advanced search</el-button></el-link
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -322,7 +413,7 @@
 import TabLineComponent from "./Lines.vue";
 export default {
   name: "TabComponent",
-  inject: ["office", "options2", "options3", "options4"],
+  inject: ["office", "options2", "options3", "options4", "options5"],
   data: () => {
     return {
       visible: false,
@@ -342,6 +433,9 @@ export default {
     },
     _options4() {
       return this.options4();
+    },
+    _options5() {
+      return this.options5();
     },
   },
   methods: {
@@ -388,9 +482,14 @@ export default {
   }
   .rightcontainer {
     flex: 0;
+    position: relative;
     &-box {
       padding: 20px 0;
     }
+  }
+  .SearchBox {
+    right: 24px;
+    bottom: -60px;
   }
 }
 </style>
