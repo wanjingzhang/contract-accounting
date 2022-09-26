@@ -29,7 +29,19 @@
         :class="(id === 4 ? 'active ' : '') + 'leftpanel-item'"
         @click="changeId(4)"
       >
-        <i class="el-icon-edit"></i> Editing
+        <el-tooltip
+          effect="dark"
+          content="(for project admin/ project account only)"
+          placement="bottom"
+          ><div class="leftpanel-item-editing">
+            <i class="el-icon-edit"></i> Editing
+          </div>
+        </el-tooltip>
+        <i
+          class="el-icon-plus"
+          style="color: #2c3e50"
+          @click.stop="EditInfo"
+        ></i>
       </div>
     </div>
     <div class="rightcontainer">
@@ -310,7 +322,7 @@
 import TabLineComponent from "./Lines.vue";
 export default {
   name: "TabComponent",
-  inject: ["options2", "options3", "options4"],
+  inject: ["office", "options2", "options3", "options4"],
   data: () => {
     return {
       visible: false,
@@ -319,6 +331,9 @@ export default {
     };
   },
   computed: {
+    _office() {
+      return this.office();
+    },
     _options2() {
       return this.options2();
     },
@@ -334,6 +349,12 @@ export default {
       if (newId !== this.id) {
         this.id = newId;
       }
+    },
+    EditInfo: function () {
+      window.open(
+        `https://kc.test.com/invoiceaspx/Import_Newsflash_from_marketing.aspx?officeid=${this._office}`,
+        "_blank"
+      );
     },
   },
   components: {
@@ -359,6 +380,9 @@ export default {
       &.active {
         background-color: #ffffff;
         color: var(--light-blue);
+      }
+      &-editing {
+        display: inline-block;
       }
     }
   }

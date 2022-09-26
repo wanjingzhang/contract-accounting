@@ -37,7 +37,7 @@
           </el-select>
           <span>Office</span>
         </div>
-        <div class="topbar-right-searchbox">
+        <div class="topbar-right-searchbox" title="Search Input">
           <el-input
             placeholder="Project name or no."
             v-model="searchStr"
@@ -170,14 +170,11 @@ export default {
         this.options4 = opt4;
       });
     },
-    SearchHandler: async function () {
-      console.log(this.data);
-      let res = await API.Search({
-        strname: this.searchStr,
-        officelocation: this.value,
-        optype: "view",
-      });
-      console.log(res);
+    SearchHandler: () => {
+      window.open(
+        `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this.value}&optype=view&strname=${this.searchStr}`,
+        "_blank"
+      );
     },
   },
   watch: {

@@ -44,31 +44,31 @@ axios.interceptors.response.use(
 );
 // 1. 获取office列表
 API.Offices = async () => {
-  const { data: res } = await axios.get("/api/invoiceoffice");
+  const { data: res } = await axios.get("/dbapi/api/invoiceoffice");
   return res;
 };
 // 2. 获取管理员列表
 API.Managers = async (str) => {
   const { data: res1 } = await axios.get(
-    `/api/teamleaderbyoffice?officeid=${str}`
+    `/dbapi/api/teamleaderbyoffice?officeid=${str}`
   );
   const { data: res2 } = await axios.get(
-    `/api/projectleaderbyoffice?officeid=${str}`
+    `/dbapi/api/projectleaderbyoffice?officeid=${str}`
   );
   return [res1, res2];
 };
 // 3. E-approval list
 API.Eapproval = async (str, callback) => {
-  const { data: res1 } = await axios.get(`/api/poap1/${str}`);
-  const { data: res2 } = await axios.get(`/api/poap2/${str}`);
-  const { data: res3 } = await axios.get(`/api/pogw1/${str}`);
+  const { data: res1 } = await axios.get(`/dbapi/api/poap1/${str}`);
+  const { data: res2 } = await axios.get(`/dbapi/api/poap2/${str}`);
+  const { data: res3 } = await axios.get(`/dbapi/api/pogw1/${str}`);
   callback([res1, res2, res3]);
 };
 // 4. Payment request approval list
 API.Payment = async (str, callback) => {
-  const { data: res1 } = await axios.get(`/api/porq1/${str}`);
-  const { data: res2 } = await axios.get(`/api/porq2/${str}`);
-  const { data: res3 } = await axios.get(`/api/porq3/${str}`);
+  const { data: res1 } = await axios.get(`/dbapi/api/porq1/${str}`);
+  const { data: res2 } = await axios.get(`/dbapi/api/porq2/${str}`);
+  const { data: res3 } = await axios.get(`/dbapi/api/porq3/${str}`);
   callback([res1, res2, res3]);
 };
 // 5. 搜索项目
