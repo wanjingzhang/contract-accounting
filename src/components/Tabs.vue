@@ -310,6 +310,7 @@
             ZSJ: '',
           }"
         />
+        <!-- Tab 4-2 -->
         <TabLineComponent
           title="Payment request approval list"
           type="options"
@@ -326,14 +327,35 @@
             POAP2:
               'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_2.aspx?person=',
             POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3.aspx?person=',
-            POCheck:
-              'https://kc.test.com/invoiceaspx/supplierpo_uploaded_check.aspx?gw=',
+            POCheck: '',
             PORegist: '',
             Taipei:
               'https://kc.test.com/invoiceaspx/po_approve_tp/po_rq_2_forpay.aspx?officeid=',
             CHN: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3_forpay.aspx?officeid=',
             ApplyPayment:
               'https://kc.test.com/invoiceaspx/supplierpo_uploaded_applypayment.aspx?officeid=',
+            CSProject: '',
+            ZSJ: '',
+          }"
+        />
+        <!-- Tab 4-3 -->
+        <TabLineComponent
+          title="Supplier uploaded check"
+          type="options"
+          :options="this._options42"
+          :links="{
+            Office: '',
+            Teams: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            RemindList: '',
+            SupplierList: '',
+            PORegist: '',
+            POCheck:
+              'https://kc.test.com/invoiceaspx/supplierpo_uploaded_check.aspx?gw=',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
             CSProject: '',
             ZSJ: '',
           }"
@@ -370,7 +392,7 @@
           :options="this._options5"
           :links="{
             Office:
-              'https://kcapp.test.com/invoiceaspx/MonthlyForecast/Mostlikely_byoffice.aspx?officeid=',
+              'https://kc.test.com/invoiceaspx/MonthlyForecast/Mostlikely_byoffice.aspx?officeid=',
             Teams: '',
             ProjectLeader: '',
             ProjectDirector: '',
@@ -432,6 +454,7 @@ export default {
     "options2",
     "options3",
     "options4",
+    "options42",
     "options5",
     "options6",
   ],
@@ -451,6 +474,9 @@ export default {
     },
     _options3() {
       return this.options3();
+    },
+    _options42() {
+      return this.options42();
     },
     _options4() {
       return this.options4();
@@ -489,6 +515,10 @@ export default {
   .leftpanel {
     width: 180px;
     &-item {
+      &:hover {
+        background-color: #fff;
+        color: var(--light-blue);
+      }
       cursor: pointer;
       user-select: none;
       background-color: #f2f2f2;

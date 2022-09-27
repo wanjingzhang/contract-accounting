@@ -73,6 +73,7 @@ export default {
       options2: [], // Project Director & Director
       options3: [], // E approval PO 1 & PO 2 & GW
       options4: [], // E approval Payment PO 1 & PO 2 & GW
+      options42: [], // check
       options5: [], // forecast
       options6: [], // ZSJ
       searchStr: "",
@@ -148,8 +149,8 @@ export default {
           { label: "PO AP1", value: "PO AP1", children: [] },
           { label: "PO AP2", value: "PO AP2", children: [] },
           { label: "PO GW", value: "PO GW", children: [] },
-          { label: "PO Check", value: "PO Check", children: [] },
         ];
+        let opt42 = [{ label: "PO Check", value: "PO Check", children: [] }];
         for (var i = 0; i < datas[0].length; i++) {
           opt4[0].children.push({
             value: datas[0][i]["po_ap_1"] + "_POAP1",
@@ -168,13 +169,15 @@ export default {
             label: datas[2][k]["po_ap_3"],
           });
         }
+
         for (var l = 0; l < datas[3].length; l++) {
-          opt4[3].children.push({
+          opt42[0].children.push({
             value: datas[3][l]["po_gw_1"] + "_POCheck",
             label: datas[3][l]["po_gw_1"],
           });
         }
         this.options4 = opt4;
+        this.options42 = opt42;
       });
     },
     ForecastList: function () {
@@ -280,6 +283,7 @@ export default {
       options2: () => this.options2,
       options3: () => this.options3,
       options4: () => this.options4,
+      options42: () => this.options42,
       options5: () => this.options5,
       options6: () => this.options6,
     };
