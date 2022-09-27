@@ -70,10 +70,11 @@ export default {
     return {
       options: [],
       value: "",
-      options2: [], // Project Leader & Director
+      options2: [], // Project Director & Director
       options3: [], // E approval PO 1 & PO 2 & GW
       options4: [], // E approval Payment PO 1 & PO 2 & GW
       options5: [], // forecast
+      options6: [], // ZSJ
       searchStr: "",
     };
   },
@@ -96,19 +97,17 @@ export default {
     async Managers(str) {
       let datas = await API.Managers(str);
       let opt2 = [
-        { label: "Team Leader", options: [] },
-        { label: "Project Leader", options: [] },
+        { label: "Project Leader", value: "Project Leader", children: [] },
+        { label: "Project Director", value: "Project Director", children: [] },
       ];
-      opt2[0].options = [];
-      opt2[1].options = [];
       for (var i = 0; i < datas[0].length; i++) {
-        opt2[0].options.push({
+        opt2[0].children.push({
           value: datas[0][i]["teamleader"] + "_ProjectLeader",
           label: datas[0][i]["teamleader"],
         });
       }
       for (var j = 0; j < datas[1].length; j++) {
-        opt2[1].options.push({
+        opt2[1].children.push({
           value: datas[1][j]["projectleader"] + "_ProjectDirector",
           label: datas[1][j]["projectleader"],
         });
@@ -118,24 +117,24 @@ export default {
     Eapproval(str) {
       API.Eapproval(str, (datas) => {
         let opt3 = [
-          { label: "PO AP1", options: [] },
-          { label: "PO AP2", options: [] },
-          { label: "PO GW", options: [] },
+          { label: "PO AP1", value: "PO AP1", children: [] },
+          { label: "PO AP2", value: "PO AP2", children: [] },
+          { label: "PO GW", value: "PO GW", children: [] },
         ];
         for (var i = 0; i < datas[0].length; i++) {
-          opt3[0].options.push({
+          opt3[0].children.push({
             value: datas[0][i]["po_ap_1"] + "_POAP1",
             label: datas[0][i]["po_ap_1"],
           });
         }
         for (var j = 0; j < datas[1].length; j++) {
-          opt3[1].options.push({
+          opt3[1].children.push({
             value: datas[1][j]["po_ap_2"] + "_POAP2",
             label: datas[1][j]["po_ap_2"],
           });
         }
         for (var k = 0; k < datas[2].length; k++) {
-          opt3[2].options.push({
+          opt3[2].children.push({
             value: datas[2][k]["po_gw_1"] + "_POGW",
             label: datas[2][k]["po_gw_1"],
           });
@@ -146,31 +145,31 @@ export default {
     Payment(str) {
       API.Payment(str, (datas) => {
         let opt4 = [
-          { label: "PO AP1", options: [] },
-          { label: "PO AP2", options: [] },
-          { label: "PO GW", options: [] },
-          { label: "PO Check", options: [] },
+          { label: "PO AP1", value: "PO AP1", children: [] },
+          { label: "PO AP2", value: "PO AP2", children: [] },
+          { label: "PO GW", value: "PO GW", children: [] },
+          { label: "PO Check", value: "PO Check", children: [] },
         ];
         for (var i = 0; i < datas[0].length; i++) {
-          opt4[0].options.push({
+          opt4[0].children.push({
             value: datas[0][i]["po_ap_1"] + "_POAP1",
             label: datas[0][i]["po_ap_1"],
           });
         }
         for (var j = 0; j < datas[1].length; j++) {
-          opt4[1].options.push({
+          opt4[1].children.push({
             value: datas[1][j]["po_ap_2"] + "_POAP2",
             label: datas[1][j]["po_ap_2"],
           });
         }
         for (var k = 0; k < datas[2].length; k++) {
-          opt4[2].options.push({
+          opt4[2].children.push({
             value: datas[2][k]["po_ap_3"] + "_POGW",
             label: datas[2][k]["po_ap_3"],
           });
         }
         for (var l = 0; l < datas[3].length; l++) {
-          opt4[3].options.push({
+          opt4[3].children.push({
             value: datas[3][l]["po_gw_1"] + "_POCheck",
             label: datas[3][l]["po_gw_1"],
           });
@@ -179,43 +178,43 @@ export default {
       });
     },
     ForecastList: function () {
-      let opt5 = [{ label: "By Team", options: [] }];
+      let opt5 = [{ label: "By Team", value: "By Team", children: [] }];
       let array = [
         {
           label: "SHA",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfo_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfo_list.aspx",
         },
         {
           label: "BJG",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfobj_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfobj_list.aspx",
         },
         {
           label: "TPE",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfotp_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfotp_list.aspx",
         },
         {
           label: "SIN",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfosg_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfosg_list.aspx",
         },
         {
           label: "India",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfoindia_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfoindia_list.aspx",
         },
         {
           label: "Toronto",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfotoronto_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfotoronto_list.aspx",
         },
         {
           label: "Vancouver",
-          value: "https://kcapp.test.com/invoiceaspx/Teaminfovan_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/Teaminfovan_list.aspx",
         },
         {
           label: "Raleigh",
-          value: "https://kcapp.test.com/invoiceaspx/TeaminfoRaleigh_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/TeaminfoRaleigh_list.aspx",
         },
         {
           label: "Denver",
-          value: "https://kcapp.test.com/invoiceaspx/TeaminfoDenver_list.aspx",
+          value: "https://kc.test.com/invoiceaspx/TeaminfoDenver_list.aspx",
         },
         {
           label: "SF",
@@ -223,9 +222,27 @@ export default {
         },
       ];
       for (let i = 0; i < array.length; i++) {
-        opt5[0].options.push(array[i]);
+        opt5[0].children.push(array[i]);
       }
       this.options5 = opt5;
+    },
+    TeaminfoZSJ: function () {
+      API.TeaminfoZSJ((res) => {
+        let opt6 = [
+          {
+            label: "By Project Director",
+            value: "By Project Director",
+            children: [],
+          },
+        ];
+        for (let i = 0; i < res.length; i++) {
+          opt6[0].children.push({
+            label: res[i]["Teaminfo"],
+            value: res[i]["Teaminfo"] + "_ZSJ",
+          });
+        }
+        this.options6 = opt6;
+      });
     },
     SearchHandler: function () {
       window.open(
@@ -249,6 +266,9 @@ export default {
 
       // 4. 获取options
       this.ForecastList();
+
+      // 5. 获取珠三角Teaminfo
+      this.TeaminfoZSJ();
     },
   },
   mounted() {
@@ -261,6 +281,7 @@ export default {
       options3: () => this.options3,
       options4: () => this.options4,
       options5: () => this.options5,
+      options6: () => this.options6,
     };
   },
   components: {

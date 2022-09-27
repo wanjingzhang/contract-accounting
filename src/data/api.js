@@ -71,6 +71,11 @@ API.Payment = async (str, callback) => {
   const { data: res4 } = await axios.get(`/dbapi/api/pogw1/${str}`);
   callback([res1, res2, res3, res4]);
 };
+// 5. get 珠三角 Teaminfo list
+API.TeaminfoZSJ = async (callback) => {
+  const { data: res } = await axios.get("/dbapi/api/TeaminfoZSJ");
+  callback(res);
+};
 
 // 向外暴露 API
 export default API;

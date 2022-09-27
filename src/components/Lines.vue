@@ -127,21 +127,13 @@
     </div>
     <!-- 1. 带有选项的右侧 -->
     <div v-if="type === 'options'" class="rightcontainer-item-right">
-      <el-select class="goSelect" v-model="value" placeholder="Select">
-        <el-option-group
-          v-for="group in options"
-          :key="group.label"
-          :label="group.label"
-        >
-          <el-option
-            v-for="item in group.options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          >
-          </el-option>
-        </el-option-group>
-      </el-select>
+      <el-cascader
+        class="goSelect"
+        placeholder="Select"
+        v-model="value"
+        :options="options"
+      ></el-cascader>
+
       <el-button class="gobtn" @click="Goto" type="info">Go</el-button>
     </div>
     <!-- 2. 带有链接的右侧 -->
@@ -226,12 +218,12 @@ export default {
   methods: {
     Goto() {
       // 确定name,type 然后跳转相应的链接
-      if (this.value !== "" && this.value.indexOf("https:") < 0) {
-        let [name, type] = this.value.split("_");
+      if (this.value[1] !== "" && this.value[1].indexOf("https:") < 0) {
+        let [name, type] = this.value[1].split("_");
         let url = `${this.links[type]}${name}&officeid=${this._office}`;
         window.open(url, "_blank");
       } else {
-        let url = `${this.value}`;
+        let url = `${this.value[1]}`;
         window.open(url, "_blank");
       }
     },

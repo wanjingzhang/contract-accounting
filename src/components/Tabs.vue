@@ -67,6 +67,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 1-2 -->
@@ -90,6 +91,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 1-3 -->
@@ -113,6 +115,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
 
@@ -137,6 +140,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 5 forecast 预测 暂时不要 -->
@@ -162,6 +166,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 2-2 -->
@@ -185,6 +190,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 2-3 -->
@@ -207,6 +213,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
       </div>
@@ -231,12 +238,13 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 3-2 -->
         <TabLineComponent
           title="Refundable Deposits"
-          type="options"
+          type="blank"
           :options="this._options2"
           :links="{
             Office: 'https://kc.test.com/invoiceaspx/deposit.aspx?officeid=',
@@ -250,6 +258,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <!-- Tab 3-3 -->
@@ -270,6 +279,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
       </div>
@@ -297,6 +307,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <TabLineComponent
@@ -316,7 +327,7 @@
               'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_2.aspx?person=',
             POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3.aspx?person=',
             POCheck:
-              'https://kcapp.test.com/invoiceaspx/supplierpo_uploaded_check.aspx?gw=',
+              'https://kc.test.com/invoiceaspx/supplierpo_uploaded_check.aspx?gw=',
             PORegist: '',
             Taipei:
               'https://kc.test.com/invoiceaspx/po_approve_tp/po_rq_2_forpay.aspx?officeid=',
@@ -324,6 +335,7 @@
             ApplyPayment:
               'https://kc.test.com/invoiceaspx/supplierpo_uploaded_applypayment.aspx?officeid=',
             CSProject: '',
+            ZSJ: '',
           }"
         />
       </div>
@@ -349,6 +361,7 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <TabLineComponent
@@ -372,12 +385,13 @@
             CHN: '',
             ApplyPayment: '',
             CSProject: '',
+            ZSJ: '',
           }"
         />
         <TabLineComponent
           title="Forecast (HK+GZ+SZ team)"
           type="options"
-          :options="this._options4"
+          :options="this._options6"
           :links="{
             Office: '',
             Teams: '',
@@ -393,14 +407,14 @@
             Taipei: '',
             CHN: '',
             ApplyPayment: '',
-            CSProject:
-              'https://kcapp.test.com/invoiceaspx/cs_project_list.aspx',
+            CSProject: 'https://kc.test.com/invoiceaspx/cs_project_list.aspx',
+            ZSJ: 'https://kc.test.com/invoiceaspx/MonthlyForecast/Globalproject_byteaminfo_Down.aspx?itype=teaminfo&iname=',
           }"
         />
       </div>
       <div class="SearchBox abRB">
         <el-link
-          :href="`https://kcapp.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this._office}`"
+          :href="`https://kc.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this._office}`"
           target="_blank"
           ><el-button type="primary" plain>Advanced search</el-button></el-link
         >
@@ -413,7 +427,14 @@
 import TabLineComponent from "./Lines.vue";
 export default {
   name: "TabComponent",
-  inject: ["office", "options2", "options3", "options4", "options5"],
+  inject: [
+    "office",
+    "options2",
+    "options3",
+    "options4",
+    "options5",
+    "options6",
+  ],
   data: () => {
     return {
       visible: false,
@@ -436,6 +457,9 @@ export default {
     },
     _options5() {
       return this.options5();
+    },
+    _options6() {
+      return this.options6();
     },
   },
   methods: {
