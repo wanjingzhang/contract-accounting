@@ -125,25 +125,33 @@ export default {
     Eapproval(str) {
       API.Eapproval(str, (datas) => {
         let opt3 = [
-          { label: "PO AP1", value: "PO AP1", children: [] },
-          { label: "PO AP2", value: "PO AP2", children: [] },
-          { label: "PO GW", value: "PO GW", children: [] },
+          { label: "Project Leader", value: "Project Leader", children: [] },
+          {
+            label: "Project Director",
+            value: "Project Director",
+            children: [],
+          },
+          {
+            label: "Project Administrator",
+            value: "Project Administrator",
+            children: [],
+          },
         ];
         for (var i = 0; i < datas[0].length; i++) {
           opt3[0].children.push({
-            value: datas[0][i]["po_ap_1"] + "_POAP1",
+            value: datas[0][i]["po_ap_1"] + "_ProjectLeader",
             label: datas[0][i]["po_ap_1"],
           });
         }
         for (var j = 0; j < datas[1].length; j++) {
           opt3[1].children.push({
-            value: datas[1][j]["po_ap_2"] + "_POAP2",
+            value: datas[1][j]["po_ap_2"] + "_ProjectDirector",
             label: datas[1][j]["po_ap_2"],
           });
         }
         for (var k = 0; k < datas[2].length; k++) {
           opt3[2].children.push({
-            value: datas[2][k]["po_gw_1"] + "_POGW",
+            value: datas[2][k]["po_gw_1"] + "_ProjectAdministrator",
             label: datas[2][k]["po_gw_1"],
           });
         }
@@ -153,26 +161,26 @@ export default {
     Payment(str) {
       API.Payment(str, (datas) => {
         let opt4 = [
-          { label: "PO AP1", value: "PO AP1", children: [] },
-          { label: "PO AP2", value: "PO AP2", children: [] },
-          { label: "PO GW", value: "PO GW", children: [] },
+          { label: "Level 1", value: "Level 1", children: [] },
+          { label: "Level 2", value: "Level 2", children: [] },
+          { label: "Level 3", value: "Level 3", children: [] },
         ];
         let opt42 = [{ label: "PO Check", value: "PO Check", children: [] }];
         for (var i = 0; i < datas[0].length; i++) {
           opt4[0].children.push({
-            value: datas[0][i]["po_ap_1"] + "_POAP1",
+            value: datas[0][i]["po_ap_1"] + "_Level1",
             label: datas[0][i]["po_ap_1"],
           });
         }
         for (var j = 0; j < datas[1].length; j++) {
           opt4[1].children.push({
-            value: datas[1][j]["po_ap_2"] + "_POAP2",
+            value: datas[1][j]["po_ap_2"] + "_Level2",
             label: datas[1][j]["po_ap_2"],
           });
         }
         for (var k = 0; k < datas[2].length; k++) {
           opt4[2].children.push({
-            value: datas[2][k]["po_ap_3"] + "_POGW",
+            value: datas[2][k]["po_ap_3"] + "_Level3",
             label: datas[2][k]["po_ap_3"],
           });
         }

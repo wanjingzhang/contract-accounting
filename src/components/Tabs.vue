@@ -292,15 +292,14 @@
           :links="{
             Office: '',
             TeamInfo: '',
-            ProjectLeader: '',
-            ProjectDirector: '',
+            ProjectLeader:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_ap_1.aspx?person=',
+            ProjectDirector:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_ap_2.aspx?person=',
+            ProjectAdministrator:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_gw.aspx?person=',
             RemindList: '',
             SupplierList: '',
-            POAP1:
-              'https://kc.test.com/invoiceaspx/po_approve_combine/po_ap_1.aspx?person=',
-            POAP2:
-              'https://kc.test.com/invoiceaspx/po_approve_combine/po_ap_2.aspx?person=',
-            POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_gw.aspx?person=',
             PORegist:
               'https://kc.test.com/invoiceaspx/po_approve_combine/po_register.aspx?officeid=',
             Taipei: '',
@@ -322,11 +321,12 @@
             ProjectDirector: '',
             RemindList: '',
             SupplierList: '',
-            POAP1:
+            Level1:
               'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_1.aspx?person=',
-            POAP2:
+            Level2:
               'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_2.aspx?person=',
-            POGW: 'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3.aspx?person=',
+            Level3:
+              'https://kc.test.com/invoiceaspx/po_approve_combine/po_rq_3.aspx?person=',
             POCheck: '',
             PORegist: '',
             Taipei:
@@ -376,7 +376,7 @@
             SupplierList: '',
             POAP1: '',
             POAP2: '',
-            POGW: '',
+            ProjectAdministrator: '',
             POCheck: '',
             PORegist: '',
             Taipei: '',
@@ -400,7 +400,7 @@
             SupplierList: '',
             POAP1: '',
             POAP2: '',
-            POGW: '',
+            ProjectAdministrator: '',
             POCheck: '',
             PORegist: '',
             Taipei: '',
@@ -423,7 +423,7 @@
             SupplierList: '',
             POAP1: '',
             POAP2: '',
-            POGW: '',
+            ProjectAdministrator: '',
             POCheck: '',
             PORegist: '',
             Taipei: '',
