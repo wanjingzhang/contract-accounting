@@ -48,13 +48,14 @@ API.Offices = async () => {
 };
 // 2. 获取管理员列表
 API.Managers = async (str) => {
-  const { data: res1 } = await axios.get(
+  const { data: res1 } = await axios.get(`/dbapi/TeaminfoOffice/${str}`);
+  const { data: res2 } = await axios.get(
     `/dbapi/api/teamleaderbyoffice?officeid=${str}`
   );
-  const { data: res2 } = await axios.get(
+  const { data: res3 } = await axios.get(
     `/dbapi/api/projectleaderbyoffice?officeid=${str}`
   );
-  return [res1, res2];
+  return [res1, res2, res3];
 };
 // 3. E-approval list
 API.Eapproval = async (str, callback) => {

@@ -54,8 +54,8 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/project_account_status.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/project_account_status_teaminfo.aspx?officeid=',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/project_account_status_teaminfo.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/project_account_status_byteam.aspx?teamleader=',
             ProjectDirector:
@@ -78,8 +78,8 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_1.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_teaminfo.aspx?officeid=',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_teaminfo.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/Total_OS_ViewbyOffice_byteam.aspx?teamleader=',
             ProjectDirector:
@@ -102,8 +102,8 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/Summary_receivebyprojno_1.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/Summary_receivebyprojno_teaminfo.aspx?officeid=',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/Summary_receivebyprojno_teaminfo.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/Summary_receivebyprojnobyteam.aspx?teamleader=',
             ProjectDirector:
@@ -127,8 +127,8 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/ClientAgingReport_byOffice_1.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/Teaminfo_aging_global.aspx?',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/Teaminfo_aging_global.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/ClientAgingReport_byteam.aspx?teamleader=',
             ProjectDirector:
@@ -153,8 +153,8 @@
           :options="this._options2"
           :links="{
             Office: 'https://kc.test.com/invoiceaspx/forecast_1.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/forecast_teaminfo.aspx?officeid=',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/forecast_teaminfo.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/forecastteam_1.aspx?teamleader=',
             ProjectDirector:
@@ -177,8 +177,8 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/OSreceive_1.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?officeid=',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/OSreceive_teaminfo.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/OSreceiveteam_1.aspx?teamleader=',
             ProjectDirector:
@@ -205,7 +205,7 @@
               'https://kc.test.com/invoiceaspx/t_remind_office.aspx?officeid=',
             SupplierList:
               'https://kc.test.com/invoiceaspx/Supplierlist.aspx?officeid=',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             PORegist: '',
@@ -225,8 +225,8 @@
           :options="this._options2"
           :links="{
             Office: 'https://kc.test.com/invoiceaspx/pcaccount.aspx?officeid=',
-            Teams:
-              'https://kc.test.com/invoiceaspx/PCAccount_teaminfo.aspx?officeid=',
+            TeamInfo:
+              'https://kc.test.com/invoiceaspx/PCAccount_teaminfo.aspx?teaminfo=',
             ProjectLeader:
               'https://kc.test.com/invoiceaspx/pcaccount_byteam.aspx?teamleader=',
             ProjectDirector:
@@ -248,7 +248,7 @@
           :options="this._options2"
           :links="{
             Office: 'https://kc.test.com/invoiceaspx/deposit.aspx?officeid=',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -269,7 +269,7 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/notransaction_project.aspx?officeid=',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -291,7 +291,7 @@
           :options="this._options3"
           :links="{
             Office: '',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -317,7 +317,7 @@
           :options="this._options4"
           :links="{
             Office: '',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -345,7 +345,7 @@
           :options="this._options42"
           :links="{
             Office: '',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -369,7 +369,7 @@
           :options="[]"
           :links="{
             Office: '',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -393,7 +393,7 @@
           :links="{
             Office:
               'https://kc.test.com/invoiceaspx/MonthlyForecast/Mostlikely_byoffice.aspx?officeid=',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',
@@ -416,7 +416,7 @@
           :options="this._options6"
           :links="{
             Office: '',
-            Teams: '',
+            TeamInfo: '',
             ProjectLeader: '',
             ProjectDirector: '',
             RemindList: '',

@@ -25,22 +25,6 @@
             ></i>
           </el-link>
         </el-tooltip>
-        <!-- 2. Teams -->
-        <el-tooltip
-          v-if="links.Teams !== ''"
-          class="item"
-          effect="dark"
-          content="Teams"
-          placement="bottom"
-        >
-          <el-link
-            :href="`${links.Teams}${this._office}&teaminfo=${this._office}%20Team%201`"
-            target="_blank"
-            type="primary"
-          >
-            <i class="el-icon-user" alt="Teams"></i>
-          </el-link>
-        </el-tooltip>
         <!-- 3. PO Regist -->
         <el-tooltip
           v-if="links.PORegist !== ''"

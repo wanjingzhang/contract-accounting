@@ -98,19 +98,26 @@ export default {
     async Managers(str) {
       let datas = await API.Managers(str);
       let opt2 = [
+        { label: "Team Info", value: "Team Info", children: [] },
         { label: "Project Leader", value: "Project Leader", children: [] },
         { label: "Project Director", value: "Project Director", children: [] },
       ];
-      for (var i = 0; i < datas[0].length; i++) {
+      for (var k = 0; k < datas[0].length; k++) {
         opt2[0].children.push({
-          value: datas[0][i]["teamleader"] + "_ProjectLeader",
-          label: datas[0][i]["teamleader"],
+          value: datas[0][k]["Teaminfo"] + "_TeamInfo",
+          label: datas[0][k]["Teaminfo"],
         });
       }
-      for (var j = 0; j < datas[1].length; j++) {
+      for (var i = 0; i < datas[1].length; i++) {
         opt2[1].children.push({
-          value: datas[1][j]["projectleader"] + "_ProjectDirector",
-          label: datas[1][j]["projectleader"],
+          value: datas[1][i]["teamleader"] + "_ProjectLeader",
+          label: datas[1][i]["teamleader"],
+        });
+      }
+      for (var j = 0; j < datas[2].length; j++) {
+        opt2[2].children.push({
+          value: datas[2][j]["projectleader"] + "_ProjectDirector",
+          label: datas[2][j]["projectleader"],
         });
       }
       return opt2;
