@@ -123,10 +123,10 @@ export default {
     Eapproval(str) {
       API.Eapproval(str, (datas) => {
         let opt3 = [
-          { label: "Project Leader", value: "Project Leader", children: [] },
+          { label: "First approver", value: "First approver", children: [] },
           {
-            label: "Project Director",
-            value: "Project Director",
+            label: "Second approver",
+            value: "Second approver",
             children: [],
           },
           {
@@ -159,9 +159,9 @@ export default {
     Payment(str) {
       API.Payment(str, (datas) => {
         let opt4 = [
-          { label: "Level 1", value: "Level 1", children: [] },
-          { label: "Level 2", value: "Level 2", children: [] },
-          { label: "Level 3", value: "Level 3", children: [] },
+          { label: "First approver", value: "First approver", children: [] },
+          { label: "Second approver", value: "Second approver", children: [] },
+          { label: "Third approver", value: "Third approver", children: [] },
         ];
         let opt42 = [{ label: "PO Check", value: "PO Check", children: [] }];
         for (var i = 0; i < datas[0].length; i++) {
@@ -316,6 +316,7 @@ export default {
   color: #2c3e50;
   margin: 50px auto;
   width: 1200px;
+  letter-spacing: 0.5px;
   .topbar {
     height: 80px;
     display: flex;
