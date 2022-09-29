@@ -160,6 +160,7 @@
 </template>
 
 <script>
+import _ from "lodash";
 export default {
   name: "TabLineComponent",
   inject: ["office"],
@@ -200,7 +201,7 @@ export default {
     },
   },
   methods: {
-    Goto() {
+    Goto: _.throttle(function () {
       // 确定name,type 然后跳转相应的链接
       if (this.value[1] !== "" && this.value[1].indexOf("https:") < 0) {
         let [name, type] = this.value[1].split("_");
@@ -210,13 +211,13 @@ export default {
         let url = `${this.value[1]}`;
         window.open(url, "_blank");
       }
-    },
-    SearchHandler() {
+    }, 1000),
+    SearchHandler: _.throttle(function () {
       window.open(
         `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this._office}&optype=operate&strname=${this.searchStr}`,
         "_blank"
       );
-    },
+    }, 1000),
   },
 };
 </script>

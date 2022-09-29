@@ -60,7 +60,7 @@
 import { Loading } from "element-ui";
 import TabComponent from "./components/Tabs.vue";
 import API from "./data/api.js";
-let load = false;
+import _ from "lodash";
 // 声明变量，用来存储Loading组件的实例对象
 let loadingInstance = null;
 
@@ -82,8 +82,6 @@ export default {
   methods: {
     // 获取全球办公室列表
     async Offices() {
-      if (load) return;
-      load = true;
       let data = await API.Offices();
       let opts = [];
       for (let i = 0; i < data.length; i++) {
@@ -270,7 +268,7 @@ export default {
     },
   },
   watch: {
-    value: async function () {
+    value: _.throttle(async function () {
       loadingInstance = Loading.service({ fullscreen: true });
       // 1. 获取管理员列表
       let opt2 = await this.Managers(this.value);
@@ -287,7 +285,7 @@ export default {
 
       // 5. 获取珠三角Teaminfo
       this.TeaminfoZSJ();
-    },
+    }, 1000),
   },
   mounted() {
     this.Offices();
@@ -322,6 +320,7 @@ export default {
     height: 80px;
     display: flex;
     justify-content: space-between;
+
     &-left {
       &-logo {
         width: 360px;
@@ -331,6 +330,7 @@ export default {
         font-size: 22px;
         line-height: 50px;
         text-align: left;
+        cursor: pointer;
         color: var(--light-blue);
       }
     }
@@ -340,6 +340,7 @@ export default {
       margin-top: -10px;
       &-office {
         margin-right: 10px;
+        cursor: pointer;
       }
       &-searchbox {
         width: 422px;

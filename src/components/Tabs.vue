@@ -31,15 +31,15 @@
       >
         <el-tooltip
           effect="dark"
-          content="(for project admin/ project account only)"
+          content="For project admin/ project account only"
           placement="bottom"
           ><div class="leftpanel-item-editing">
             <i class="el-icon-edit"></i> Editing
           </div>
         </el-tooltip>
         <i
-          class="el-icon-plus"
-          style="color: #2c3e50"
+          title="Import Newsflash"
+          class="el-icon-plus plus"
           @click.stop="EditInfo"
         ></i>
       </div>
@@ -362,7 +362,7 @@
         />
       </div>
       <div v-show="id === 4" class="rightcontainer-box">
-        <!-- Tab 4-1 updating the project info -->
+        <!-- Tab 5-1 updating the project info -->
         <TabLineComponent
           title="Contract Accounting Document"
           type="search"
@@ -386,6 +386,7 @@
             ZSJ: '',
           }"
         />
+        <!-- Tab 5-2 Forecast -->
         <TabLineComponent
           title="Forecast"
           type="options"
@@ -410,7 +411,13 @@
             ZSJ: '',
           }"
         />
+        <!-- Tab 5-3 Forecast (HK+GZ+SZ team) -->
         <TabLineComponent
+          v-if="
+            this._office === 'Guangzhou' ||
+            this._office === 'Shenzhen' ||
+            this._office === 'HongKong'
+          "
           title="Forecast (HK+GZ+SZ team)"
           type="options"
           :options="this._options6"
@@ -447,6 +454,7 @@
 
 <script>
 import TabLineComponent from "./Lines.vue";
+import _ from "lodash";
 export default {
   name: "TabComponent",
   inject: [
@@ -494,12 +502,12 @@ export default {
         this.id = newId;
       }
     },
-    EditInfo: function () {
+    EditInfo: _.throttle(function () {
       window.open(
         `https://kc.test.com/invoiceaspx/Import_Newsflash_from_marketing.aspx?officeid=${this._office}`,
         "_blank"
       );
-    },
+    }, 1000),
   },
   components: {
     TabLineComponent,
@@ -531,6 +539,12 @@ export default {
       }
       &-editing {
         display: inline-block;
+      }
+    }
+    .plus {
+      margin-left: 4px;
+      &:hover {
+        color: var(--light-orange);
       }
     }
   }
