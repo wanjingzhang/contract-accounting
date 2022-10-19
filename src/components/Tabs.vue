@@ -441,13 +441,6 @@
           }"
         />
       </div>
-      <div class="SearchBox abRB">
-        <el-link
-          :href="`https://kc.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this._office}`"
-          target="_blank"
-          ><el-button type="primary" plain>Advanced search</el-button></el-link
-        >
-      </div>
     </div>
   </div>
 </template>
@@ -519,7 +512,7 @@ export default {
 .Tabs {
   margin-top: 60px;
   display: flex;
-  background-color: #f8f8f8;
+  background-color: #ffffff;
   .leftpanel {
     width: 180px;
     &-item {
@@ -532,6 +525,7 @@ export default {
       background-color: #f2f2f2;
       width: 180px;
       height: 80px;
+      font-size: 16px;
       line-height: 80px;
       &.active {
         background-color: #ffffff;
@@ -549,11 +543,8 @@ export default {
     }
   }
   .rightcontainer {
-    flex: 0;
     position: relative;
-    &-box {
-      padding: 20px 0;
-    }
+    width: 100%;
   }
   .SearchBox {
     right: 24px;

@@ -127,7 +127,7 @@
         type="primary"
         :href="`${links.RemindList}${this._office}`"
         target="_blank"
-        >Remind list</el-link
+        >Remind List</el-link
       >
       <el-link
         v-if="links.SupplierList !== ''"
@@ -223,16 +223,19 @@ export default {
 </script>
 <style scoped lang="less">
 .rightcontainer-item {
-  width: 886px;
-  margin: 0 80px;
+  width: calc(100% - 80px);
+  min-height: 80px;
+  margin-left: 80px;
   border-bottom: 1px solid #cccccc;
   display: flex;
   justify-content: space-between;
   padding: 20px 0 10px;
   box-sizing: border-box;
+  font-size: 16px;
   &-left {
     text-align: left;
-    font-size: 18px;
+    font-size: 16px;
+    min-width: 140px;
     &-team {
       color: var(--light-blue);
       line-height: 22px;
@@ -243,19 +246,43 @@ export default {
   }
   &-right {
     display: flex;
+    height: 32px;
+    .goSelect {
+      line-height: 32px;
+      width: 220px;
+      :deep(.el-input) {
+        input {
+          height: 32px;
+        }
+      }
+    }
+    .gobtn {
+      height: 32px;
+      line-height: 32px;
+      padding: 0 12px;
+      font-size: 12px;
+    }
   }
   &-right2 {
     display: flex;
     justify-content: space-between;
     width: 200px;
+    :deep(.el-link) {
+      font-size: 16px;
+    }
   }
   &-right4 {
     .searchinput {
+      :deep(input) {
+        height: 32px;
+      }
       :deep(.el-input-group__append) {
         background: #909399;
         color: #ffffff;
+        padding: 0 12px;
       }
-      width: 322px;
+      height: 32px;
+      width: 260px;
     }
   }
 }

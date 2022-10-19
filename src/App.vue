@@ -38,6 +38,14 @@
           <span>Office</span>
         </div>
         <div class="topbar-right-searchbox" title="Search Input">
+          <el-link
+            class="advanced"
+            :href="`https://kc.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this.value}`"
+            target="_blank"
+          >
+            Advanced search
+            <i class="el-icon-search" alt="Taipei/India Pay"></i>
+          </el-link>
           <el-input
             placeholder="Project name or no."
             v-model="searchStr"
@@ -315,8 +323,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin: 50px auto;
-  width: 1200px;
   letter-spacing: 0.5px;
+  display: flex;
+  flex-direction: column;
   .topbar {
     height: 80px;
     display: flex;
@@ -324,11 +333,12 @@ export default {
 
     &-left {
       &-logo {
-        width: 360px;
+        max-width: 360px;
+        min-width: 150px;
         height: 26px;
       }
       &-title {
-        font-size: 22px;
+        font-size: 20px;
         line-height: 50px;
         text-align: left;
         cursor: pointer;
@@ -336,7 +346,7 @@ export default {
       }
     }
     &-right {
-      font-size: 18px;
+      font-size: 16px;
       text-align: right;
       margin-top: -10px;
       &-office {
@@ -344,14 +354,27 @@ export default {
         cursor: pointer;
       }
       &-searchbox {
-        width: 422px;
+        width: 520px;
+        display: flex;
+
+        justify-content: space-between;
+        .advanced {
+          width: auto;
+          font-size: 16px;
+          span {
+            width: 100px;
+            height: 32px;
+          }
+        }
+        .searchinput {
+          width: 300px;
+        }
       }
     }
   }
 }
-
 :deep(.el-input__inner) {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .no-border {
@@ -365,5 +388,48 @@ export default {
 <style lang="less">
 :deep(.el-select-dropdown__item) {
   color: var(--light-blue);
+}
+
+@media screen and (min-width: 10px) and (max-width: 1280px) {
+  #app {
+    width: 100%;
+    display: block;
+    .topbar-left-logo {
+      width: 100%;
+    }
+    .topbar-left-title {
+      font-size: 0.9rem !important;
+      line-height: 1.2rem !important;
+    }
+    .rightcontainer-item {
+      margin-left: 20px;
+      width: calc(100% - 20px);
+    }
+    .topbar-right-searchbox {
+      width: 50%;
+    }
+    .topbar-right-searchbox {
+      width: 100% !important;
+      flex-direction: column !important;
+      align-items: end;
+    }
+    .Tabs .leftpanel-item {
+      min-width: 120px;
+      width: auto;
+      padding: 0 4px;
+    }
+    .rightcontainer-item-right4 .searchinput {
+      width: 50%;
+      min-width: 100px;
+    }
+    .rightcontainer-item-right .goSelect {
+      width: 60%;
+      min-width: 100px;
+    }
+    .topbar-right-searchbox .advanced {
+      height: 32px;
+      line-height: 32px;
+    }
+  }
 }
 </style>
