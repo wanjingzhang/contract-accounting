@@ -1,6 +1,25 @@
+* {
+  border: 0;
+  margin: 0;
+  border: 0;
+}
+
+body,
+html,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
 :root {
   --light-blue: #409EFF;
   --light-orange: #FF671F;
+}
+
+.abLT {
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .abRB {
@@ -8,3 +27,23 @@
   right: 0;
   bottom: 0;
 }
+
+@keyframes wavesAni {
+  0% {
+    width: 128px;
+    height: 128px;
+    opacity: 0;
+  }
+
+  2% {
+    opacity: 1;
+  }
+
+  100% {
+    width: 160px;
+    height: 160px;
+    opacity: 0;
+  }
+}
+
+.waves {}

@@ -137,6 +137,16 @@
         >Supplier List</el-link
       >
     </div>
+    <!-- 2. 带有链接的右侧 -->
+    <div v-else-if="type === 'go'" class="rightcontainer-item-right22">
+      <el-link
+        v-if="links.GoList !== ''"
+        type="primary"
+        :href="`${links.GoList}${this._office}`"
+        target="_blank"
+        >Go</el-link
+      >
+    </div>
     <!-- 3. 空白的右侧 -->
     <div v-else-if="type === 'blank'" class="rightcontainer-item-right3"></div>
     <!-- 4. 带有搜索的右侧 -->
@@ -237,7 +247,7 @@ export default {
     font-size: 16px;
     min-width: 140px;
     &-team {
-      color: var(--light-blue);
+      color: var(--light-orange);
       line-height: 22px;
       i {
         margin: 4px 4px 0;
@@ -266,6 +276,14 @@ export default {
   &-right2 {
     display: flex;
     justify-content: space-between;
+    width: 200px;
+    :deep(.el-link) {
+      font-size: 16px;
+    }
+  }
+  &-right22 {
+    display: flex;
+    justify-content: right;
     width: 200px;
     :deep(.el-link) {
       font-size: 16px;

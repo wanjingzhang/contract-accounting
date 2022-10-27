@@ -1,27 +1,19 @@
 <template>
   <div id="app">
-    <div class="topbar">
-      <div class="topbar-left">
-        <img class="topbar-left-logo" alt="Vue logo" src="./assets/logo.svg" />
-        <div class="topbar-left-title">Contract Accounting</div>
+    <!-- 内容部分 -->
+    <div class="content">
+      <!-- 背景 -->
+      <div class="bg abLT"></div>
+      <!-- 标题部分 -->
+      <div class="topbar">
+        <img class="topbar-logo" alt="test" src="./assets/logo_color.svg" />
       </div>
-      <div class="topbar-right">
-        <div class="topbar-right-office">
-          <el-tooltip
-            class="item"
-            effect="dark"
-            content="project status checking"
-            placement="left"
-          >
-            <el-link
-              href="https://kc.test.com/invoiceaspx/australia_search.aspx"
-              target="_blank"
-              type="primary"
-              ><i class="el-icon-suitcase" alt="Office"></i>
-            </el-link>
-          </el-tooltip>
-
+      <!-- 中间subtitle部分 -->
+      <div class="subtitle">
+        <h2>Contract Accounting</h2>
+        <div class="subtitle-office">
           <el-select
+            type="warning"
             class="no-border"
             v-model="value"
             filterable
@@ -35,32 +27,29 @@
             >
             </el-option>
           </el-select>
-          <span>Office</span>
+          <span>office</span>
         </div>
-        <div class="topbar-right-searchbox" title="Search Input">
-          <el-link
-            class="advanced"
-            :href="`https://kc.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this.value}`"
-            target="_blank"
-          >
-            Advanced search
-            <i class="el-icon-search" alt="Taipei/India Pay"></i>
-          </el-link>
-          <el-input
-            placeholder="Project name or no."
-            v-model="searchStr"
-            class="searchinput"
-          >
-            <el-button
-              slot="append"
-              icon="el-icon-search"
-              @click="SearchHandler"
-            ></el-button>
-          </el-input>
+      </div>
+
+      <TabComponent />
+      <!-- cases -->
+      <div class="cases">
+        <div
+          v-for="i in projectLength"
+          :key="i"
+          :class="['cases-item ', itemId == i + 1 ? 'active' : '']"
+          @mouseenter="addActive(i + 1)"
+          @mouseleave="addActive(-1)"
+        >
+          <div class="waves">
+            <div class="wave" style="--i: 1"></div>
+            <div class="wave" style="--i: 2"></div>
+            <div class="wave" style="--i: 3"></div>
+          </div>
+          <img :src="imgs[i - 1]" />
         </div>
       </div>
     </div>
-    <TabComponent />
   </div>
 </template>
 
@@ -69,6 +58,13 @@ import { Loading } from "element-ui";
 import TabComponent from "./components/Tabs.vue";
 import API from "./data/api.js";
 import _ from "lodash";
+import img1 from "./assets/btns/1.jpg";
+import img2 from "./assets/btns/2.jpg";
+import img3 from "./assets/btns/3.jpg";
+import img4 from "./assets/btns/4.jpg";
+import img5 from "./assets/btns/5.jpg";
+const imgs = [img1, img2, img3, img4, img5];
+
 // 声明变量，用来存储Loading组件的实例对象
 let loadingInstance = null;
 
@@ -85,9 +81,16 @@ export default {
       options5: [], // forecast
       options6: [], // ZSJ
       searchStr: "",
+      itemId: -1,
+      projectLength: 5,
+      imgs: imgs,
     };
   },
   methods: {
+    addActive(id) {
+      console.log(id);
+      this.itemId = id;
+    },
     // 获取全球办公室列表
     async Offices() {
       let data = await API.Offices();
@@ -322,52 +325,97 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin: 50px auto;
-  letter-spacing: 0.5px;
-  display: flex;
-  flex-direction: column;
-  .topbar {
-    height: 80px;
-    display: flex;
-    justify-content: space-between;
 
-    &-left {
+  letter-spacing: 0.5px;
+  position: relative;
+  .content {
+    max-width: 1280px;
+    min-height: 800px;
+    margin: auto auto;
+    position: relative;
+    .topbar {
+      height: 80px;
       &-logo {
         max-width: 360px;
         min-width: 150px;
         height: 26px;
-      }
-      &-title {
-        font-size: 20px;
-        line-height: 50px;
-        text-align: left;
-        cursor: pointer;
-        color: var(--light-blue);
+        float: right;
+        margin: 20px 20px 0 0;
       }
     }
-    &-right {
-      font-size: 16px;
-      text-align: right;
-      margin-top: -10px;
-      &-office {
-        margin-right: 10px;
-        cursor: pointer;
+    .bg {
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      background: url("./assets/bg.jpg") no-repeat;
+      background-size: 100% auto;
+      background-position: center center;
+      min-width: 1280px;
+    }
+    .subtitle {
+      width: 330px;
+      height: 70px;
+      margin: 0 auto;
+      :deep(.el-input__icon) {
+        color: #ff671f;
+        font-size: 24px;
+        line-height: 28px;
       }
-      &-searchbox {
-        width: 520px;
+      h2 {
+        font-size: 32px;
+        color: #000000;
+      }
+      &-office {
+        font-size: 24px;
+        font-weight: 600;
         display: flex;
+        justify-content: center;
+        &-select {
+          width: 200px;
+        }
+      }
+    }
+    .cases {
+      display: flex;
+      width: 748px;
+      justify-content: space-around;
+      &-item {
+        width: 120px;
+        height: 120px;
+        position: relative;
 
-        justify-content: space-between;
-        .advanced {
-          width: auto;
-          font-size: 16px;
-          span {
-            width: 100px;
-            height: 32px;
+        img {
+          width: 124px;
+          height: 124px;
+          margin: -2px 0 0 -2px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 4px solid #ffffff;
+        }
+
+        &.active {
+          .waves {
+            .wave {
+              animation: wavesAni 1s linear infinite;
+              animation-delay: calc(0.3s * var(--i));
+            }
           }
         }
-        .searchinput {
-          width: 300px;
+
+        .waves {
+          position: absolute;
+          top: calc(50% + 4px);
+          left: calc(50% + 4px);
+          .wave {
+            position: absolute;
+            left: 0;
+            top: 0;
+            transform: translate(-50%, -50%);
+            box-sizing: border-box;
+            border: 2px solid #fff;
+            border-radius: 50%;
+            opacity: 0;
+          }
         }
       }
     }
@@ -375,31 +423,37 @@ export default {
 }
 :deep(.el-input__inner) {
   font-size: 16px;
+  height: 32px;
 }
 
 .no-border {
   :deep(.el-input__inner) {
     border: 0;
-    color: var(--light-blue);
-    width: 140px;
+    color: var(--light-orange);
+    background: transparent !important;
+    font-size: 24px;
+    font-weight: 600;
+    width: 200px;
   }
 }
 </style>
 <style lang="less">
-:deep(.el-select-dropdown__item) {
-  color: var(--light-blue);
+:deep(.el-select-dropdown__item.selected) {
+  color: var(--light-orange) !important;
+}
+.theme-select {
 }
 
 @media screen and (min-width: 10px) and (max-width: 1280px) {
   #app {
     width: 100%;
     display: block;
-    .topbar-left-logo {
-      width: 100%;
-    }
     .topbar-left-title {
       font-size: 0.9rem !important;
       line-height: 1.2rem !important;
+    }
+    .topbar-left-office {
+      right: -150px !important;
     }
     .rightcontainer-item {
       margin-left: 20px;

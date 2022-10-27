@@ -5,7 +5,14 @@
         :class="(id === 0 ? 'active ' : '') + 'leftpanel-item'"
         @click="changeId(0)"
       >
-        <i class="el-icon-message"></i> Reporting
+        <el-tooltip
+          effect="dark"
+          content="For project admin/ project account only"
+          placement="bottom"
+          ><div class="leftpanel-item-editing">
+            <i class="el-icon-edit"></i> Editing
+          </div>
+        </el-tooltip>
       </div>
       <div
         :class="(id === 1 ? 'active ' : '') + 'leftpanel-item'"
@@ -29,23 +36,11 @@
         :class="(id === 4 ? 'active ' : '') + 'leftpanel-item'"
         @click="changeId(4)"
       >
-        <el-tooltip
-          effect="dark"
-          content="For project admin/ project account only"
-          placement="bottom"
-          ><div class="leftpanel-item-editing">
-            <i class="el-icon-edit"></i> Editing
-          </div>
-        </el-tooltip>
-        <i
-          title="Import Newsflash"
-          class="el-icon-plus plus"
-          @click.stop="EditInfo"
-        ></i>
+        <i class="el-icon-message"></i> Reporting
       </div>
     </div>
     <div class="rightcontainer">
-      <div v-show="id === 0" class="rightcontainer-box">
+      <div v-show="id === 4" class="rightcontainer-box">
         <!-- Tab 1-1 -->
         <TabLineComponent
           title="Contract Accounting with Client Status"
@@ -361,8 +356,30 @@
           }"
         />
       </div>
-      <div v-show="id === 4" class="rightcontainer-box">
-        <!-- Tab 5-1 updating the project info -->
+      <div v-show="id === 0" class="rightcontainer-box">
+        <!-- Tab 5-1 import newsflash -->
+        <TabLineComponent
+          title="Import Newsflash From Marketing"
+          type="go"
+          :options="[]"
+          :links="{
+            Office: '',
+            RemindList: '',
+            SupplierList: '',
+            GoList:
+              'https://kc.test.com/invoiceaspx/Import_Newsflash_from_marketing.aspx?officeid=',
+            TeamInfo: '',
+            ProjectLeader: '',
+            ProjectDirector: '',
+            PORegist: '',
+            Taipei: '',
+            CHN: '',
+            ApplyPayment: '',
+            CSProject: '',
+            ZSJ: '',
+          }"
+        />
+        <!-- Tab 5-2 updating the project info -->
         <TabLineComponent
           title="Contract Accounting Document"
           type="search"
@@ -386,7 +403,7 @@
             ZSJ: '',
           }"
         />
-        <!-- Tab 5-2 Forecast -->
+        <!-- Tab 5-3 Forecast -->
         <TabLineComponent
           title="Forecast"
           type="options"
@@ -447,7 +464,6 @@
 
 <script>
 import TabLineComponent from "./Lines.vue";
-import _ from "lodash";
 export default {
   name: "TabComponent",
   inject: [
@@ -495,12 +511,6 @@ export default {
         this.id = newId;
       }
     },
-    EditInfo: _.throttle(function () {
-      window.open(
-        `https://kc.test.com/invoiceaspx/Import_Newsflash_from_marketing.aspx?officeid=${this._office}`,
-        "_blank"
-      );
-    }, 1000),
   },
   components: {
     TabLineComponent,
@@ -512,13 +522,12 @@ export default {
 .Tabs {
   margin-top: 60px;
   display: flex;
-  background-color: #ffffff;
   .leftpanel {
     width: 180px;
     &-item {
       &:hover {
         background-color: #fff;
-        color: var(--light-blue);
+        color: var(--light-orange);
       }
       cursor: pointer;
       user-select: none;
@@ -529,7 +538,7 @@ export default {
       line-height: 80px;
       &.active {
         background-color: #ffffff;
-        color: var(--light-blue);
+        color: var(--light-orange);
       }
       &-editing {
         display: inline-block;
