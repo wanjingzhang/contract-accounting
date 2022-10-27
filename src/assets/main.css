@@ -9,11 +9,22 @@ html,
 #app {
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 
 :root {
   --light-blue: #409EFF;
   --light-orange: #FF671F;
+  --light-yellow: #ffff00;
+  --white: #ffffff;
+  --black: #000000;
+}
+
+.abCC {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .abLT {
@@ -28,6 +39,14 @@ html,
   bottom: 0;
 }
 
+.abLB {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+}
+
+
+/* 波浪晕染开 */
 @keyframes wavesAni {
   0% {
     width: 128px;
@@ -36,7 +55,7 @@ html,
   }
 
   2% {
-    opacity: 1;
+    opacity: 0.7;
   }
 
   100% {
@@ -46,4 +65,44 @@ html,
   }
 }
 
-.waves {}
+@keyframes changeStatus {
+  0% {
+    background-color: var(--white);
+    transform: scale(1);
+  }
+
+  69% {
+    background-color: var(--white);
+    transform: scale(0);
+  }
+
+  70% {
+    background-color: var(--light-orange);
+    transform: scale(0);
+  }
+
+  100% {
+    background-color: var(--light-orange);
+    transform: scale(1);
+  }
+}
+
+@keyframes light {
+  0% {
+    box-shadow: 0 0 0 var(--white);
+  }
+
+  100% {
+    box-shadow: 0 0 45px var(--white);
+  }
+}
+
+@keyframes show {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}

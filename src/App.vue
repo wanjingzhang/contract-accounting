@@ -1,13 +1,37 @@
 <template>
-  <div id="app">
-    <!-- 内容部分 -->
-    <div class="content">
-      <!-- 背景 -->
-      <div class="bg abLT"></div>
-      <!-- 标题部分 -->
-      <div class="topbar">
-        <img class="topbar-logo" alt="test" src="./assets/logo_color.svg" />
+  <div id="app" @mousemove="moveBox" @mouseleave="leaveBox" ref="box">
+    <!-- 背景 -->
+    <div class="bg abLT"></div>
+    <!-- 标题部分 -->
+    <div class="topbar">
+      <img class="topbar-logo" alt="test" src="./assets/logo_color.svg" />
+    </div>
+    <!-- cases -->
+    <div class="cases abLB">
+      <div
+        v-for="i in projectLength"
+        :key="i"
+        :class="['cases-item ', itemId == i + 1 ? 'active' : '']"
+        @mouseenter="addActive(i + 1)"
+        @mouseleave="addActive(-1)"
+      >
+        <div class="waves">
+          <div class="wave" style="--i: 1"></div>
+          <div class="wave" style="--i: 2"></div>
+        </div>
+        <img :src="imgs[i - 1]" />
       </div>
+    </div>
+
+    <!-- 内容部分 -->
+    <div
+      class="content abCC"
+      :style="
+        'transform-origin: left center;transform:' +
+        this.transform +
+        ' translate(-50%, -50%)'
+      "
+    >
       <!-- 中间subtitle部分 -->
       <div class="subtitle">
         <h2>Contract Accounting</h2>
@@ -32,23 +56,6 @@
       </div>
 
       <TabComponent />
-      <!-- cases -->
-      <div class="cases">
-        <div
-          v-for="i in projectLength"
-          :key="i"
-          :class="['cases-item ', itemId == i + 1 ? 'active' : '']"
-          @mouseenter="addActive(i + 1)"
-          @mouseleave="addActive(-1)"
-        >
-          <div class="waves">
-            <div class="wave" style="--i: 1"></div>
-            <div class="wave" style="--i: 2"></div>
-            <div class="wave" style="--i: 3"></div>
-          </div>
-          <img :src="imgs[i - 1]" />
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -64,7 +71,12 @@ import img3 from "./assets/btns/3.jpg";
 import img4 from "./assets/btns/4.jpg";
 import img5 from "./assets/btns/5.jpg";
 const imgs = [img1, img2, img3, img4, img5];
-
+let box,
+  y,
+  x,
+  calcY,
+  calcX,
+  multiple = 160;
 // 声明变量，用来存储Loading组件的实例对象
 let loadingInstance = null;
 
@@ -84,11 +96,29 @@ export default {
       itemId: -1,
       projectLength: 5,
       imgs: imgs,
+      transform: "rotateX(0) rotateY(0)",
     };
   },
   methods: {
+    transformElement(e) {
+      box = this.$refs.box.getBoundingClientRect();
+      // rotateY = (鼠标 x 坐标 - 元素左上角 x 坐标 - 元素宽度的一半)deg
+      y = e.clientY;
+      x = e.clientX;
+      calcX = Math.floor(-(y - box.y - box.height / 2) / multiple);
+      calcY = Math.floor((x - box.x - box.width / 2) / multiple);
+      this.transform =
+        "rotateY(" + calcY + "deg)" + "rotateX(" + calcX + "deg) ";
+    },
+    moveBox(e) {
+      window.requestAnimationFrame(() => {
+        this.transformElement(e);
+      });
+    },
+    leaveBox() {
+      this.transform = "rotateX(0) rotateY(0) ";
+    },
     addActive(id) {
-      console.log(id);
       this.itemId = id;
     },
     // 获取全球办公室列表
@@ -325,37 +355,96 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  opacity: 0;
+  animation: show 1s 1s forwards;
 
   letter-spacing: 0.5px;
   position: relative;
-  .content {
-    max-width: 1280px;
-    min-height: 800px;
-    margin: auto auto;
-    position: relative;
-    .topbar {
-      height: 80px;
-      &-logo {
-        max-width: 360px;
-        min-width: 150px;
-        height: 26px;
-        float: right;
-        margin: 20px 20px 0 0;
+  transform-style: preserve-3d;
+  perspective: 500px;
+  .bg {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: url("./assets/bg.jpg") no-repeat;
+    background-size: cover;
+    background-position: center center;
+  }
+  .topbar {
+    height: 80px;
+    &-logo {
+      max-width: 360px;
+      min-width: 150px;
+      height: 26px;
+      float: right;
+      margin: 20px 20px 0 0;
+    }
+  }
+
+  .cases {
+    display: flex;
+    width: 760px;
+    justify-content: space-around;
+    margin-left: 32px;
+    bottom: 60px;
+    left: 20px;
+    &-item {
+      width: 120px;
+      height: 120px;
+      position: relative;
+      transition: all 0.4s ease 0.1s;
+      filter: brightness(0.9);
+      transform: scale(1);
+      img {
+        width: 124px;
+        height: 124px;
+        margin: -2px 0 0 -2px;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 3px solid #ffffff;
+      }
+
+      &.active {
+        filter: brightness(1);
+        transform: scale(1.2);
+
+        .waves {
+          .wave {
+            animation: wavesAni 1.2s ease-in infinite;
+            animation-delay: calc(0.5s * var(--i));
+          }
+        }
+      }
+
+      .waves {
+        position: absolute;
+        top: calc(50% + 4px);
+        left: calc(50% + 4px);
+        .wave {
+          position: absolute;
+          left: 0;
+          top: 0;
+          transform: translate(-50%, -50%);
+          box-sizing: border-box;
+          border: 2px solid #fff;
+          border-radius: 50%;
+          opacity: 0;
+        }
       }
     }
-    .bg {
-      z-index: -1;
-      width: 100%;
-      height: 100%;
-      background: url("./assets/bg.jpg") no-repeat;
-      background-size: 100% auto;
-      background-position: center center;
-      min-width: 1280px;
-    }
+  }
+
+  .content {
+    top: 40%;
+    max-width: 1280px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.5s;
     .subtitle {
       width: 330px;
       height: 70px;
       margin: 0 auto;
+      user-select: none;
       :deep(.el-input__icon) {
         color: #ff671f;
         font-size: 24px;
@@ -370,52 +459,10 @@ export default {
         font-weight: 600;
         display: flex;
         justify-content: center;
+        user-select: none;
+        color: #000000;
         &-select {
           width: 200px;
-        }
-      }
-    }
-    .cases {
-      display: flex;
-      width: 748px;
-      justify-content: space-around;
-      &-item {
-        width: 120px;
-        height: 120px;
-        position: relative;
-
-        img {
-          width: 124px;
-          height: 124px;
-          margin: -2px 0 0 -2px;
-          border-radius: 50%;
-          overflow: hidden;
-          border: 4px solid #ffffff;
-        }
-
-        &.active {
-          .waves {
-            .wave {
-              animation: wavesAni 1s linear infinite;
-              animation-delay: calc(0.3s * var(--i));
-            }
-          }
-        }
-
-        .waves {
-          position: absolute;
-          top: calc(50% + 4px);
-          left: calc(50% + 4px);
-          .wave {
-            position: absolute;
-            left: 0;
-            top: 0;
-            transform: translate(-50%, -50%);
-            box-sizing: border-box;
-            border: 2px solid #fff;
-            border-radius: 50%;
-            opacity: 0;
-          }
         }
       }
     }
