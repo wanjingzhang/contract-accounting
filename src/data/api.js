@@ -78,5 +78,27 @@ API.TeaminfoZSJ = async (callback) => {
   callback(res);
 };
 
+// 6. get 取得没有在contract accounting的project list
+API.ImportProjectList = async (str, callback) => {
+  const { data: res } = await axios.get(`/dbapi/importprojects/${str}`);
+  callback(res);
+};
+
+// 7. get 传入id, 将此id 关联project copy 到 contract accounting
+API.ImportProjectAction = async (str, callback) => {
+  const { data: res } = await axios.get(`/dbapi/importprojectaction/${str}`);
+  callback(res);
+};
+
+// 8. 传入 officeid, 取得该office 所有list, Project No 拼接规则是，Uno=0, project no=projectno, 如果 Uno<>0, Project No=projectno.Uno
+API.ProjectList = async (str, callback) => {
+  try {
+    const { data: res } = await axios.get(`/dbapi/projectlistapi/${str}`);
+    callback(res);
+  } catch (e) {
+    console.log(e);
+  }
+};
+
 // 向外暴露 API
 export default API;

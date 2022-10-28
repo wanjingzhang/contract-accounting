@@ -1,11 +1,28 @@
 <template>
   <div class="rightcontainer-item">
     <div class="rightcontainer-item-left">
-      <div class="rightcontainer-item-left-title">
+      <div v-if="this.title.length > 0" class="rightcontainer-item-left-title">
         {{ this.title }}
       </div>
+      <div v-if="this.type == 'cascader'">
+        <el-button
+          class="rightcontainer-item-left-button"
+          type="warning"
+          plain
+          @click="importProject"
+          >Add</el-button
+        >
+      </div>
+      <div v-if="this.type == 'cascaderlazy'">
+        <el-button
+          class="rightcontainer-item-left-button"
+          type="warning"
+          plain
+          @click="projectDetail"
+          >Search</el-button
+        >
+      </div>
       <div class="rightcontainer-item-left-team">
-        <!-- 3 icons -->
         <!-- 1. Office -->
         <el-tooltip
           v-if="links.Office !== ''"
@@ -137,16 +154,6 @@
         >Supplier List</el-link
       >
     </div>
-    <!-- 2. 带有链接的右侧 -->
-    <div v-else-if="type === 'go'" class="rightcontainer-item-right22">
-      <el-link
-        v-if="links.GoList !== ''"
-        type="primary"
-        :href="`${links.GoList}${this._office}`"
-        target="_blank"
-        >Go</el-link
-      >
-    </div>
     <!-- 3. 空白的右侧 -->
     <div v-else-if="type === 'blank'" class="rightcontainer-item-right3"></div>
     <!-- 4. 带有搜索的右侧 -->
@@ -166,11 +173,37 @@
         </el-input>
       </div>
     </div>
+    <!-- 5. 级联搜索 -->
+    <div v-else-if="type === 'cascader'" class="rightcontainer-item-right4">
+      <el-cascader
+        ref="cascader"
+        :options="_optionsImported"
+        placeholder="Searching by name or no."
+        :props="{ checkStrictly: true }"
+        v-model="selectedProjectNo"
+        filterable
+        clearable
+        @change="close"
+      ></el-cascader>
+    </div>
+    <!-- layzy load -->
+    <div v-else-if="type === 'cascaderlazy'" class="rightcontainer-item-right4">
+      <el-cascader
+        ref="cascaderlazy"
+        placeholder="Searching by name or no."
+        :options="hasProjectList"
+        v-model="hasProjectNo"
+        filterable
+        clearable
+        @change="close2"
+      ></el-cascader>
+    </div>
   </div>
 </template>
 
 <script>
 import _ from "lodash";
+import API from "../data/api.js";
 export default {
   name: "TabLineComponent",
   inject: ["office"],
@@ -191,6 +224,10 @@ export default {
       ],
       ApplyPay: ["Taipei"],
       searchStr: "",
+      selectedProjectNo: "",
+      importedProjectList: [],
+      hasProjectNo: "",
+      hasProjectList: [],
     };
   },
   props: {
@@ -204,13 +241,67 @@ export default {
     _office() {
       return this.office();
     },
+    _optionsImported() {
+      // 剔除已经import的数据再重绘
+      let ary = this.options;
+      let hasary = [],
+        id = 0;
+      for (let i in this.importedProjectList) {
+        hasary = ary.filter((item, index) => {
+          if (item.value == this.importedProjectList[i]) {
+            id = index;
+            return item;
+          }
+        });
+        if (hasary.length > 0) {
+          let obj = ary.splice(id, 1);
+          console.log(obj);
+
+          // 重新加载数据
+          // this.getImportedProject();
+        }
+      }
+      return ary;
+    },
   },
   watch: {
     _office() {
       this.value = "";
     },
   },
+  mounted() {
+    if (this.type == "cascaderlazy") {
+      this.getImportedProject();
+    }
+  },
   methods: {
+    getImportedProject() {
+      setTimeout(() => {
+        API.ProjectList(this._office, (res) => {
+          let name,
+            filt = [];
+          if (res.length > 0) {
+            for (let i = 0; i < res.length; i++) {
+              let { projectname, projectno } = res[i];
+              name =
+                String(projectno).trim() + ":" + String(projectname).trim();
+              filt = this.hasProjectList.filter((item) => item.value == name);
+
+              // 是否存在，在现有列表里，
+              if (filt.length === 0) {
+                this.hasProjectList.push({ label: name, value: projectname });
+              }
+            }
+          }
+        });
+      }, 1000);
+    },
+    close() {
+      this.$refs.cascader.dropDownVisible = false; //监听值发生变化就关闭它
+    },
+    close2() {
+      this.$refs.cascaderlazy.dropDownVisible = false; //监听值发生变化就关闭它
+    },
     Goto: _.throttle(function () {
       // 确定name,type 然后跳转相应的链接
       if (this.value[1] !== "" && this.value[1].indexOf("https:") < 0) {
@@ -228,15 +319,46 @@ export default {
         "_blank"
       );
     }, 1000),
+    projectDetail: _.throttle(function () {
+      window.open(
+        `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this._office}&optype=view&strname=${this.hasProjectNo}`,
+        "_blank"
+      );
+    }),
+    importProject: _.throttle(function () {
+      // 获取选中的value， 导入id
+      // console.log(this.selectedProjectNo);
+      let str = this.selectedProjectNo[0];
+      this.selectedProjectNo = "";
+      API.ImportProjectAction(str, (res) => {
+        if (res.code == 200) {
+          this.importedProjectList.push(str);
+          this.$message({
+            message: "Imported successfully!",
+          });
+          let ary = this.options.filter((item) => {
+            if (item.value == str) {
+              return item;
+            }
+          });
+
+          // 通知外部组件更新列表
+          this.$emit("syncList", ary[0].label);
+        }
+      });
+    }),
+    importedName(name) {
+      console.log("come on");
+      this.hasProjectList.unshift({ label: name, value: name.split(":")[1] });
+    },
   },
 };
 </script>
 <style scoped lang="less">
 .rightcontainer-item {
-  width: calc(100% - 80px);
+  width: calc(100% - 20px);
   min-height: 80px;
   margin-left: 80px;
-  border-bottom: 1px solid #cccccc;
   display: flex;
   justify-content: space-between;
   padding: 20px 0 10px;
@@ -245,7 +367,7 @@ export default {
   &-left {
     text-align: left;
     font-size: 16px;
-    min-width: 140px;
+    width: 240px;
     &-team {
       color: var(--light-orange);
       line-height: 22px;
@@ -253,22 +375,22 @@ export default {
         margin: 4px 4px 0;
       }
     }
+    &-button {
+      width: 140px;
+    }
   }
   &-right {
-    display: flex;
-    height: 32px;
     .goSelect {
-      line-height: 32px;
-      width: 220px;
+      width: 203px;
       :deep(.el-input) {
         input {
-          height: 32px;
+          height: 38px;
         }
       }
     }
     .gobtn {
-      height: 32px;
-      line-height: 32px;
+      height: 38px;
+      line-height: 38px;
       padding: 0 12px;
       font-size: 12px;
     }
@@ -292,14 +414,14 @@ export default {
   &-right4 {
     .searchinput {
       :deep(input) {
-        height: 32px;
+        height: 38px;
       }
       :deep(.el-input-group__append) {
         background: #909399;
         color: #ffffff;
         padding: 0 12px;
       }
-      height: 32px;
+      height: 38px;
       width: 260px;
     }
   }

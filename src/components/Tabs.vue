@@ -14,18 +14,18 @@
         </div>
       </div>
       <div class="rightcontainer">
+        <!-- 1. Editing -->
         <div v-show="id === 0" class="rightcontainer-box">
-          <!-- Tab 5-1 import newsflash -->
+          <!-- Tab 1-1 import project list -->
           <TabLineComponent
-            title="Import Newsflash From Marketing"
-            type="go"
-            :options="[]"
+            title=""
+            type="cascader"
+            :options="this._options7"
             :links="{
               Office: '',
               RemindList: '',
               SupplierList: '',
-              GoList:
-                'https://kc.test.com/invoiceaspx/Import_Newsflash_from_marketing.aspx?officeid=',
+              GoList: '',
               TeamInfo: '',
               ProjectLeader: '',
               ProjectDirector: '',
@@ -36,11 +36,13 @@
               CSProject: '',
               ZSJ: '',
             }"
+            @syncList="receive"
           />
-          <!-- Tab 5-2 updating the project info -->
+          <!-- Tab 1-2 updating the project info -->
           <TabLineComponent
-            title="Contract Accounting Document"
-            type="search"
+            ref="imported"
+            title=""
+            type="cascaderlazy"
             :options="[]"
             :links="{
               Office: '',
@@ -61,7 +63,7 @@
               ZSJ: '',
             }"
           />
-          <!-- Tab 5-3 Forecast -->
+          <!-- Tab 1-3 Forecast -->
           <TabLineComponent
             title="Forecast"
             type="options"
@@ -86,7 +88,7 @@
               ZSJ: '',
             }"
           />
-          <!-- Tab 5-3 Forecast (HK+GZ+SZ team) -->
+          <!-- Tab 1-3 Forecast (HK+GZ+SZ team) -->
           <TabLineComponent
             v-if="
               this._office === 'Guangzhou' ||
@@ -451,6 +453,7 @@ export default {
     "options42",
     "options5",
     "options6",
+    "options7",
   ],
   data: () => {
     return {
@@ -489,8 +492,15 @@ export default {
     _options6() {
       return this.options6();
     },
+    _options7() {
+      return this.options7();
+    },
   },
   methods: {
+    receive(name) {
+      console.log("p[" + name);
+      this.$refs.imported.importedName(name);
+    },
     changeId(newId) {
       if (newId !== this.id) {
         this.id = newId;

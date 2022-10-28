@@ -92,6 +92,8 @@ export default {
       options42: [], // check
       options5: [], // forecast
       options6: [], // ZSJ
+      options7: [], // ImportList
+
       searchStr: "",
       itemId: -1,
       projectLength: 5,
@@ -301,6 +303,18 @@ export default {
         this.options6 = opt6;
       });
     },
+    ImportList: function (str) {
+      API.ImportProjectList(str, (res) => {
+        let opt7 = [];
+        for (let i = 0; i < res.length; i++) {
+          opt7.push({
+            label: res[i]["ProjectNo"] + ":" + res[i]["Projectname"],
+            value: String(res[i]["id"]).trim(),
+          });
+        }
+        this.options7 = opt7;
+      });
+    },
     SearchHandler: function () {
       window.open(
         `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this.value}&optype=view&strname=${this.searchStr}`,
@@ -311,6 +325,9 @@ export default {
   watch: {
     value: _.throttle(async function () {
       loadingInstance = Loading.service({ fullscreen: true });
+      // 6. 获取添加列表
+      this.ImportList(this.value);
+
       // 1. 获取管理员列表
       let opt2 = await this.Managers(this.value);
       this.options2 = opt2;
@@ -340,6 +357,7 @@ export default {
       options42: () => this.options42,
       options5: () => this.options5,
       options6: () => this.options6,
+      options7: () => this.options7,
     };
   },
   components: {
@@ -470,7 +488,6 @@ export default {
 }
 :deep(.el-input__inner) {
   font-size: 16px;
-  height: 32px;
 }
 
 .no-border {
@@ -491,10 +508,10 @@ export default {
 .theme-select {
 }
 
-@media screen and (min-width: 10px) and (max-width: 1280px) {
+@media screen and (min-width: 768px) and (max-width: 900px) {
   #app {
-    width: 100%;
     display: block;
+    overflow: auto;
     .topbar-left-title {
       font-size: 0.9rem !important;
       line-height: 1.2rem !important;
@@ -531,6 +548,12 @@ export default {
       height: 32px;
       line-height: 32px;
     }
+  }
+}
+@media screen and (min-width: 480px) {
+  #app {
+    display: block;
+    overflow: auto;
   }
 }
 </style>
