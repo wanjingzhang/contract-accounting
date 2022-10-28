@@ -1,5 +1,5 @@
 <template>
-  <div class="rightcontainer-item">
+  <div :class="'rightcontainer-item animation' + this.animation">
     <div class="rightcontainer-item-left">
       <div v-if="this.title.length > 0" class="rightcontainer-item-left-title">
         {{ this.title }}
@@ -236,6 +236,7 @@ export default {
     type: String, // options,supplies
     options: Array,
     supplies: Array,
+    animation: String, // 动画
   },
   computed: {
     _office() {
@@ -256,9 +257,6 @@ export default {
         if (hasary.length > 0) {
           let obj = ary.splice(id, 1);
           console.log(obj);
-
-          // 重新加载数据
-          // this.getImportedProject();
         }
       }
       return ary;
@@ -271,30 +269,29 @@ export default {
   },
   mounted() {
     if (this.type == "cascaderlazy") {
-      this.getImportedProject();
+      setTimeout(() => {
+        this.getImportedProject();
+      }, 1000);
     }
   },
   methods: {
     getImportedProject() {
-      setTimeout(() => {
-        API.ProjectList(this._office, (res) => {
-          let name,
-            filt = [];
-          if (res.length > 0) {
-            for (let i = 0; i < res.length; i++) {
-              let { projectname, projectno } = res[i];
-              name =
-                String(projectno).trim() + ":" + String(projectname).trim();
-              filt = this.hasProjectList.filter((item) => item.value == name);
+      API.ProjectList(this._office, (res) => {
+        let name,
+          filt = [];
+        if (res.length > 0) {
+          for (let i = 0; i < res.length; i++) {
+            let { projectname, projectno } = res[i];
+            name = String(projectno).trim() + ":" + String(projectname).trim();
+            filt = this.hasProjectList.filter((item) => item.value == name);
 
-              // 是否存在，在现有列表里，
-              if (filt.length === 0) {
-                this.hasProjectList.push({ label: name, value: projectname });
-              }
+            // 是否存在，在现有列表里，
+            if (filt.length === 0) {
+              this.hasProjectList.push({ label: name, value: projectname });
             }
           }
-        });
-      }, 1000);
+        }
+      });
     },
     close() {
       this.$refs.cascader.dropDownVisible = false; //监听值发生变化就关闭它
@@ -320,50 +317,108 @@ export default {
       );
     }, 1000),
     projectDetail: _.throttle(function () {
-      window.open(
-        `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this._office}&optype=view&strname=${this.hasProjectNo}`,
-        "_blank"
-      );
+      if (this.hasProjectNo.length == 0) {
+        this.$message.error("Please select a select project first.");
+        return;
+      } else {
+        window.open(
+          `https://kc.test.com/invoiceaspx/projectsearchget.aspx?officelocation=${this._office}&optype=view&strname=${this.hasProjectNo}`,
+          "_blank"
+        );
+        this.hasProjectNo = "";
+      }
     }),
     importProject: _.throttle(function () {
       // 获取选中的value， 导入id
       // console.log(this.selectedProjectNo);
       let str = this.selectedProjectNo[0];
-      this.selectedProjectNo = "";
-      API.ImportProjectAction(str, (res) => {
-        if (res.code == 200) {
-          this.importedProjectList.push(str);
-          this.$message({
-            message: "Imported successfully!",
-          });
-          let ary = this.options.filter((item) => {
-            if (item.value == str) {
-              return item;
-            }
-          });
+      if (str == "" || str == undefined) {
+        this.$message.error("Please select an import project first.");
+        return;
+      } else {
+        this.selectedProjectNo = "";
+        API.ImportProjectAction(str, (res) => {
+          if (res.code == 200 && res.message != "-1") {
+            this.importedProjectList.push(str);
+            this.$message({
+              message: "Imported successfully!",
+            });
+            let ary = this.options.filter((item) => {
+              if (item.value == str) {
+                return item;
+              }
+            });
 
-          // 通知外部组件更新列表
-          this.$emit("syncList", ary[0].label);
-        }
-      });
+            // 通知外部组件更新列表
+            this.$emit("syncList", ary[0].label);
+          }
+        });
+      }
     }),
+    // 导入项目名称
     importedName(name) {
       console.log("come on");
       this.hasProjectList.unshift({ label: name, value: name.split(":")[1] });
+    },
+    // 更新city
+    updated() {
+      if (this.type == "cascaderlazy") {
+        setTimeout(() => {
+          this.hasProjectList = [];
+          this.getImportedProject();
+        }, 1000);
+      }
     },
   },
 };
 </script>
 <style scoped lang="less">
+@keyframes move {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+.animation0 {
+  animation: move 0.5s forwards;
+}
+.animation1 {
+  animation: move 0.5s forwards 0.1s;
+}
+.animation2 {
+  animation: move 0.5s forwards 0.2s;
+}
+.animation3 {
+  animation: move 0.5s forwards 0.3s;
+}
+.animation4 {
+  animation: move 0.5s forwards 0.4s;
+}
+.animation5 {
+  animation: move 0.5s forwards 0.5s;
+}
+.animation6 {
+  animation: move 0.5s forwards 0.6s;
+}
 .rightcontainer-item {
-  width: calc(100% - 20px);
-  min-height: 80px;
-  margin-left: 80px;
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.62);
+  }
+  opacity: 0;
+  transform: translateX(100px);
+  padding: 10px 20px;
   display: flex;
   justify-content: space-between;
-  padding: 20px 0 10px;
+  justify-items: center;
   box-sizing: border-box;
   font-size: 16px;
+  transition: background-color 0.5s linear;
+  border-radius: 4px;
+  margin: 2px 0;
   &-left {
     text-align: left;
     font-size: 16px;
@@ -377,6 +432,9 @@ export default {
     }
     &-button {
       width: 140px;
+    }
+    &-title {
+      user-select: none;
     }
   }
   &-right {

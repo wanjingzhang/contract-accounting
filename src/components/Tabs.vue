@@ -20,6 +20,7 @@
           <TabLineComponent
             title=""
             type="cascader"
+            animation="0"
             :options="this._options7"
             :links="{
               Office: '',
@@ -43,6 +44,7 @@
             ref="imported"
             title=""
             type="cascaderlazy"
+            animation="1"
             :options="[]"
             :links="{
               Office: '',
@@ -67,6 +69,7 @@
           <TabLineComponent
             title="Forecast"
             type="options"
+            animation="2"
             :options="this._options5"
             :links="{
               Office:
@@ -97,6 +100,7 @@
             "
             title="Forecast (HK+GZ+SZ team)"
             type="options"
+            animation="3"
             :options="this._options6"
             :links="{
               Office: '',
@@ -123,6 +127,7 @@
           <TabLineComponent
             title="Overdue Invoice Issuance"
             type="options"
+            animation="0"
             :options="this._options2"
             :links="{
               Office:
@@ -147,6 +152,7 @@
           <TabLineComponent
             title="Overdue Accounts Receivable (AR) "
             type="options"
+            animation="1"
             :options="this._options2"
             :links="{
               Office:
@@ -172,6 +178,7 @@
             title="Overdue Contract Financial Status Report"
             type="supplies"
             :options="this._options2"
+            animation="2"
             :links="{
               Office:
                 'https://kc.test.com/invoiceaspx/overdue_report_sin.aspx?officeid=',
@@ -196,6 +203,7 @@
           <TabLineComponent
             title="Invoice scheduling Check List"
             type="options"
+            animation="0"
             :options="this._options2"
             :links="{
               Office:
@@ -220,6 +228,7 @@
           <TabLineComponent
             title="Refundable Deposits"
             type="blank"
+            animation="1"
             :options="this._options2"
             :links="{
               Office: 'https://kc.test.com/invoiceaspx/deposit.aspx?officeid=',
@@ -240,6 +249,7 @@
           <TabLineComponent
             title="No transaction record projects"
             type="blank"
+            animation="2"
             :options="this._options2"
             :links="{
               Office:
@@ -263,6 +273,7 @@
           <TabLineComponent
             title="Contract Accounting with Client Status"
             type="options"
+            animation="0"
             :options="this._options2"
             :links="{
               Office:
@@ -287,6 +298,7 @@
           <TabLineComponent
             title="Contract Accounting with Client/ Vendors Status"
             type="options"
+            animation="1"
             :options="this._options2"
             :links="{
               Office:
@@ -311,6 +323,7 @@
           <TabLineComponent
             title="Outstanding Accounts Receivable (AR)"
             type="options"
+            animation="2"
             :options="this._options2"
             :links="{
               Office:
@@ -336,6 +349,7 @@
           <TabLineComponent
             title="Client Aging"
             type="options"
+            animation="3"
             :options="this._options2"
             :links="{
               Office:
@@ -363,6 +377,7 @@
           <TabLineComponent
             title="PO approval list"
             type="options"
+            animation="0"
             :options="this._options3"
             :links="{
               Office: '',
@@ -388,6 +403,7 @@
           <TabLineComponent
             title="Payment request approval list"
             type="options"
+            animation="1"
             :options="this._options4"
             :links="{
               Office: '',
@@ -417,6 +433,7 @@
           <TabLineComponent
             title="Supplier uploaded check"
             type="options"
+            animation="2"
             :options="this._options42"
             :links="{
               Office: '',
@@ -497,6 +514,11 @@ export default {
     },
   },
   methods: {
+    // 接受新的office
+    updated(city) {
+      this.$refs.imported.updated(city);
+    },
+    // 接受新插入的项目
     receive(name) {
       console.log("p[" + name);
       this.$refs.imported.importedName(name);
@@ -522,17 +544,16 @@ export default {
 
 <style lang="less" scoped>
 .TabBox {
-  width: 60%;
   margin: 0 auto;
   height: 430px;
-  min-width: 750px;
+  width: 800px;
 
   .Tabs {
-    display: flex;
     margin: 20px auto;
 
     .leftpanel {
-      width: 240px;
+      width: 210px;
+      float: left;
       .item {
         font-size: 28px;
         font-weight: 600;
@@ -570,6 +591,11 @@ export default {
           }
         }
       }
+    }
+
+    .rightcontainer {
+      width: 590px;
+      float: left;
     }
     .SearchBox {
       right: 24px;

@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @mousemove="moveBox" @mouseleave="leaveBox" ref="box">
+  <div id="app">
     <!-- 背景 -->
     <div class="bg abLT"></div>
     <!-- 标题部分 -->
@@ -8,30 +8,13 @@
     </div>
     <!-- cases -->
     <div class="cases abLB">
-      <div
-        v-for="i in projectLength"
-        :key="i"
-        :class="['cases-item ', itemId == i + 1 ? 'active' : '']"
-        @mouseenter="addActive(i + 1)"
-        @mouseleave="addActive(-1)"
-      >
-        <div class="waves">
-          <div class="wave" style="--i: 1"></div>
-          <div class="wave" style="--i: 2"></div>
-        </div>
+      <div v-for="i in projectLength" :key="i" class="cases-item">
         <img :src="imgs[i - 1]" />
       </div>
     </div>
 
     <!-- 内容部分 -->
-    <div
-      class="content abCC"
-      :style="
-        'transform-origin: left center;transform:' +
-        this.transform +
-        ' translate(-50%, -50%)'
-      "
-    >
+    <div class="content abCC">
       <!-- 中间subtitle部分 -->
       <div class="subtitle">
         <h2>Contract Accounting</h2>
@@ -55,7 +38,7 @@
         </div>
       </div>
 
-      <TabComponent />
+      <TabComponent ref="tabs" />
     </div>
   </div>
 </template>
@@ -71,12 +54,6 @@ import img3 from "./assets/btns/3.jpg";
 import img4 from "./assets/btns/4.jpg";
 import img5 from "./assets/btns/5.jpg";
 const imgs = [img1, img2, img3, img4, img5];
-let box,
-  y,
-  x,
-  calcY,
-  calcX,
-  multiple = 160;
 // 声明变量，用来存储Loading组件的实例对象
 let loadingInstance = null;
 
@@ -98,28 +75,9 @@ export default {
       itemId: -1,
       projectLength: 5,
       imgs: imgs,
-      transform: "rotateX(0) rotateY(0)",
     };
   },
   methods: {
-    transformElement(e) {
-      box = this.$refs.box.getBoundingClientRect();
-      // rotateY = (鼠标 x 坐标 - 元素左上角 x 坐标 - 元素宽度的一半)deg
-      y = e.clientY;
-      x = e.clientX;
-      calcX = Math.floor(-(y - box.y - box.height / 2) / multiple);
-      calcY = Math.floor((x - box.x - box.width / 2) / multiple);
-      this.transform =
-        "rotateY(" + calcY + "deg)" + "rotateX(" + calcX + "deg) ";
-    },
-    moveBox(e) {
-      window.requestAnimationFrame(() => {
-        this.transformElement(e);
-      });
-    },
-    leaveBox() {
-      this.transform = "rotateX(0) rotateY(0) ";
-    },
     addActive(id) {
       this.itemId = id;
     },
@@ -343,6 +301,9 @@ export default {
 
       // 5. 获取珠三角Teaminfo
       this.TeaminfoZSJ();
+
+      // 6. office 修改时，需要向下传递到组件
+      this.$refs.tabs.updated(this.value);
     }, 1000),
   },
   mounted() {
@@ -378,7 +339,6 @@ export default {
 
   letter-spacing: 0.5px;
   position: relative;
-  transform-style: preserve-3d;
   perspective: 500px;
   .bg {
     z-index: -1;
@@ -421,34 +381,6 @@ export default {
         overflow: hidden;
         border: 3px solid #ffffff;
       }
-
-      &.active {
-        filter: brightness(1);
-        transform: scale(1.2);
-
-        .waves {
-          .wave {
-            animation: wavesAni 1.2s ease-in infinite;
-            animation-delay: calc(0.5s * var(--i));
-          }
-        }
-      }
-
-      .waves {
-        position: absolute;
-        top: calc(50% + 4px);
-        left: calc(50% + 4px);
-        .wave {
-          position: absolute;
-          left: 0;
-          top: 0;
-          transform: translate(-50%, -50%);
-          box-sizing: border-box;
-          border: 2px solid #fff;
-          border-radius: 50%;
-          opacity: 0;
-        }
-      }
     }
   }
 
@@ -456,8 +388,6 @@ export default {
     top: 40%;
     max-width: 1280px;
     position: relative;
-    transform-style: preserve-3d;
-    transition: all 0.5s;
     .subtitle {
       width: 330px;
       height: 70px;
@@ -510,43 +440,8 @@ export default {
 
 @media screen and (min-width: 768px) and (max-width: 900px) {
   #app {
-    display: block;
-    overflow: auto;
-    .topbar-left-title {
-      font-size: 0.9rem !important;
-      line-height: 1.2rem !important;
-    }
-    .topbar-left-office {
-      right: -150px !important;
-    }
     .rightcontainer-item {
-      margin-left: 20px;
-      width: calc(100% - 20px);
-    }
-    .topbar-right-searchbox {
-      width: 50%;
-    }
-    .topbar-right-searchbox {
-      width: 100% !important;
-      flex-direction: column !important;
-      align-items: end;
-    }
-    .Tabs .leftpanel-item {
-      min-width: 120px;
-      width: auto;
-      padding: 0 4px;
-    }
-    .rightcontainer-item-right4 .searchinput {
-      width: 50%;
-      min-width: 100px;
-    }
-    .rightcontainer-item-right .goSelect {
-      width: 60%;
-      min-width: 100px;
-    }
-    .topbar-right-searchbox .advanced {
-      height: 32px;
-      line-height: 32px;
+      /* catch */
     }
   }
 }
