@@ -195,53 +195,38 @@ export default {
       });
     },
     ForecastList: function () {
-      let opt5 = [{ label: "By Team", value: "By Team", children: [] }];
-      let array = [
-        {
-          label: "SHA",
-          value: "https://kc.test.com/invoiceaspx/Teaminfo_list.aspx",
-        },
-        {
-          label: "BJG",
-          value: "https://kc.test.com/invoiceaspx/Teaminfobj_list.aspx",
-        },
-        {
-          label: "TPE",
-          value: "https://kc.test.com/invoiceaspx/Teaminfotp_list.aspx",
-        },
-        {
-          label: "SIN",
-          value: "https://kc.test.com/invoiceaspx/Teaminfosg_list.aspx",
-        },
-        {
-          label: "India",
-          value: "https://kc.test.com/invoiceaspx/Teaminfoindia_list.aspx",
-        },
-        {
-          label: "Toronto",
-          value: "https://kc.test.com/invoiceaspx/Teaminfotoronto_list.aspx",
-        },
-        {
-          label: "Vancouver",
-          value: "https://kc.test.com/invoiceaspx/Teaminfovan_list.aspx",
-        },
-        {
-          label: "Raleigh",
-          value: "https://kc.test.com/invoiceaspx/TeaminfoRaleigh_list.aspx",
-        },
-        {
-          label: "Denver",
-          value: "https://kc.test.com/invoiceaspx/TeaminfoDenver_list.aspx",
-        },
-        {
-          label: "SF",
-          value: "https://kc.test.com/invoiceaspx/TeaminfoSF_list.aspx",
-        },
-      ];
-      for (let i = 0; i < array.length; i++) {
-        opt5[0].children.push(array[i]);
+      let str = "";
+      let forecastObj = {
+        Shanghai: "https://kc.test.com/invoiceaspx/Teaminfo_list.aspx",
+        Beijing: "https://kc.test.com/invoiceaspx/Teaminfobj_list.aspx",
+        Taipei: "https://kc.test.com/invoiceaspx/Teaminfotp_list.aspx",
+        Singapore: "https://kc.test.com/invoiceaspx/Teaminfosg_list.aspx",
+        India: "https://kc.test.com/invoiceaspx/Teaminfoindia_list.aspx",
+        Toronto: "https://kc.test.com/invoiceaspx/Teaminfotoronto_list.aspx",
+        Vancouver: "https://kc.test.com/invoiceaspx/Teaminfovan_list.aspx",
+        Raleigh: "https://kc.test.com/invoiceaspx/TeaminfoRaleigh_list.aspx",
+        Denver: "https://kc.test.com/invoiceaspx/TeaminfoDenver_list.aspx",
+        SanFrancisco: "https://kc.test.com/invoiceaspx/TeaminfoSF_list.aspx",
+      };
+
+      // is check the india
+      if (
+        this.value == "Delhi" ||
+        this.value == "Bangalore" ||
+        this.value == "Mumbai" ||
+        this.value == "Hyderabad"
+      ) {
+        str = forecastObj["India"];
+        this.options5 = ["India", str];
+      } else {
+        // filter the data
+        str = forecastObj[this.value];
+        this.options5 = [this.value, str];
+        if (str == undefined || str.length == 0) {
+          str = "";
+          this.options5 = [];
+        }
       }
-      this.options5 = opt5;
     },
     TeaminfoZSJ: function () {
       API.TeaminfoZSJ((res) => {
@@ -279,6 +264,18 @@ export default {
         "_blank"
       );
     },
+    // H5 plus事件处理
+    plusReady: function () {
+      // 设置系统状态栏背景为红色
+      var type =
+        navigator.userAgent.match(/(iPad).*OS\s([\d_]+)/) ||
+        navigator.userAgent.match(/(iPhone\sOS)\s([\d_]+)/);
+      if (type == "iOS") {
+        navigator.setStatusBarBackground("#368CBD");
+      } else {
+        navigator.setStatusBarBackground("#ddd");
+      }
+    },
   },
   watch: {
     value: _.throttle(async function () {
@@ -308,6 +305,11 @@ export default {
   },
   mounted() {
     this.Offices();
+    if (window.plus) {
+      this.plusReady();
+    } else {
+      document.addEventListener("plusready", this.plusReady, false);
+    }
   },
   provide: function () {
     return {
@@ -386,10 +388,10 @@ export default {
 
   .content {
     top: 40%;
-    max-width: 1280px;
+    width: 1280px;
     position: relative;
     .subtitle {
-      width: 330px;
+      width: 800px;
       height: 70px;
       margin: 0 auto;
       user-select: none;
@@ -405,6 +407,7 @@ export default {
       &-office {
         font-size: 24px;
         font-weight: 600;
+        line-height: 40px;
         display: flex;
         justify-content: center;
         user-select: none;
@@ -435,20 +438,133 @@ export default {
 :deep(.el-select-dropdown__item.selected) {
   color: var(--light-orange) !important;
 }
-.theme-select {
-}
 
-@media screen and (min-width: 768px) and (max-width: 900px) {
-  #app {
-    .rightcontainer-item {
-      /* catch */
+@media screen and (min-width: 0) and (max-width: 768px) {
+  .myCascader {
+    width: 90% !important;
+    left: 5% !important;
+  }
+
+  #app .topbar {
+    height: 60px !important;
+    .topbar-logo {
+      width: 80% !important;
+      margin: 4px 10% !important;
     }
   }
-}
-@media screen and (min-width: 480px) {
-  #app {
-    display: block;
+
+  #app .rightcontainer-item {
+    padding: 5px 0 4px 10px;
+  }
+
+  #app .content {
+    width: 100% !important;
     overflow: auto;
+  }
+  #app .no-border {
+    .el-input__inner {
+      font-size: 0.8rem;
+      width: 148px;
+    }
+  }
+  #app .content .subtitle {
+    width: 100% !important;
+    h2 {
+      font-size: 1.2rem !important;
+    }
+    &-office {
+      font-size: 0.8rem !important;
+    }
+    .el-input__icon {
+      font-size: 0.8rem !important;
+    }
+  }
+  #app .cases {
+    width: 98% !important;
+    bottom: -40px !important;
+    margin-left: 0 !important;
+    left: 0 !important;
+    .cases-item {
+      width: 16%;
+      img {
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  #app .TabBox {
+    width: 100% !important;
+    .Tabs {
+      margin: 0;
+    }
+    .leftpanel {
+      width: 20% !important;
+      overflow: hidden;
+      padding: 10px 0;
+      .item {
+        font-size: 1.8rem;
+        padding: 0 2px;
+        height: auto;
+        margin: 0 0 20px 0;
+      }
+      .item-tail {
+        font-size: 0.6rem;
+        width: 34px;
+        display: inline-block;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        word-wrap: break-word;
+        display: inline-block;
+      }
+      .item-ball {
+        width: 95%;
+        margin-left: 5%;
+        height: 2.6rem;
+        left: -4px;
+        border-radius: 4px;
+      }
+
+      .item.active {
+        .item-ball {
+          animation: changeStatus 0.3s forwards ease-out;
+        }
+      }
+    }
+
+    .rightcontainer {
+      width: 80% !important;
+    }
+    .rightcontainer-item-left {
+      width: 50% !important;
+      &-title {
+        font-size: 0.8rem;
+      }
+    }
+
+    .rightcontainer-item-right2 {
+      justify-content: right;
+      padding-right: 8px;
+      .forecastLink {
+        font-size: 0.8rem;
+      }
+    }
+    .rightcontainer-item-right {
+      width: 50% !important;
+      height: 40px;
+      box-sizing: border-box;
+      .gobtn {
+        height: 100%;
+        box-sizing: border-box;
+        width: 40px !important;
+      }
+      .goSelect {
+        height: 100%;
+        box-sizing: border-box;
+        width: calc(100% - 50px) !important;
+      }
+    }
   }
 }
 </style>

@@ -8,7 +8,7 @@
           :key="i"
           @click="changeId(i)"
         >
-          <div class="item-ball abLT"></div>
+          <div :ref="'ball' + i" class="item-ball abLT"></div>
           <span class="item-capital">{{ value.charAt(0) }}</span>
           <span class="item-tail">{{ value.substring(1, value.length) }}</span>
         </div>
@@ -18,7 +18,7 @@
         <div v-show="id === 0" class="rightcontainer-box">
           <!-- Tab 1-1 import project list -->
           <TabLineComponent
-            title=""
+            title="XXXXXXX"
             type="cascader"
             animation="0"
             :options="this._options7"
@@ -42,7 +42,7 @@
           <!-- Tab 1-2 updating the project info -->
           <TabLineComponent
             ref="imported"
-            title=""
+            title="XXXXXXX"
             type="cascaderlazy"
             animation="1"
             :options="[]"
@@ -68,7 +68,7 @@
           <!-- Tab 1-3 Forecast -->
           <TabLineComponent
             title="Forecast"
-            type="options"
+            type="Forecast"
             animation="2"
             :options="this._options5"
             :links="{
@@ -527,6 +527,7 @@ export default {
       if (newId !== this.id) {
         this.id = newId;
       }
+
       if (newId == 5) {
         console.log(newId);
         window.open(

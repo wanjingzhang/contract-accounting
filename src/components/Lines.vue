@@ -4,24 +4,6 @@
       <div v-if="this.title.length > 0" class="rightcontainer-item-left-title">
         {{ this.title }}
       </div>
-      <div v-if="this.type == 'cascader'">
-        <el-button
-          class="rightcontainer-item-left-button"
-          type="warning"
-          plain
-          @click="importProject"
-          >Add</el-button
-        >
-      </div>
-      <div v-if="this.type == 'cascaderlazy'">
-        <el-button
-          class="rightcontainer-item-left-button"
-          type="warning"
-          plain
-          @click="projectDetail"
-          >Search</el-button
-        >
-      </div>
       <div class="rightcontainer-item-left-team">
         <!-- 1. Office -->
         <el-tooltip
@@ -141,6 +123,7 @@
     <div v-else-if="type === 'supplies'" class="rightcontainer-item-right2">
       <el-link
         v-if="links.RemindList !== ''"
+        class="forecastLink"
         type="primary"
         :href="`${links.RemindList}${this._office}`"
         target="_blank"
@@ -148,10 +131,24 @@
       >
       <el-link
         v-if="links.SupplierList !== ''"
+        class="forecastLink"
         type="primary"
         :href="`${links.SupplierList}${this._office}`"
         target="_blank"
         >Supplier List</el-link
+      >
+    </div>
+    <!-- 2. 带有链接的右侧 -->
+    <div
+      v-else-if="type === 'Forecast' && this.options.length > 0"
+      class="rightcontainer-item-right2"
+    >
+      <el-link
+        class="forecastLink"
+        type="primary"
+        :href="`${this.options[1]}`"
+        target="_blank"
+        >{{ this.options[0] }} Forecast</el-link
       >
     </div>
     <!-- 3. 空白的右侧 -->
@@ -174,22 +171,26 @@
       </div>
     </div>
     <!-- 5. 级联搜索 -->
-    <div v-else-if="type === 'cascader'" class="rightcontainer-item-right4">
+    <div v-else-if="type === 'cascader'" class="rightcontainer-item-right">
       <el-cascader
         ref="cascader"
+        class="goSelect"
+        popper-class="myCascader"
         :options="_optionsImported"
         placeholder="Searching by name or no."
-        :props="{ checkStrictly: true }"
         v-model="selectedProjectNo"
         filterable
         clearable
         @change="close"
       ></el-cascader>
+      <el-button class="gobtn" @click="importProject" type="info">Go</el-button>
     </div>
     <!-- layzy load -->
-    <div v-else-if="type === 'cascaderlazy'" class="rightcontainer-item-right4">
+    <div v-else-if="type === 'cascaderlazy'" class="rightcontainer-item-right">
       <el-cascader
         ref="cascaderlazy"
+        class="goSelect"
+        popper-class="myCascader"
         placeholder="Searching by name or no."
         :options="hasProjectList"
         v-model="hasProjectNo"
@@ -197,6 +198,7 @@
         clearable
         @change="close2"
       ></el-cascader>
+      <el-button class="gobtn" @click="projectDetail" type="info">Go</el-button>
     </div>
   </div>
 </template>
@@ -438,17 +440,16 @@ export default {
     }
   }
   &-right {
+    display: flex;
+    align-items: end;
     .goSelect {
       width: 203px;
       :deep(.el-input) {
         input {
-          height: 38px;
         }
       }
     }
     .gobtn {
-      height: 38px;
-      line-height: 38px;
       padding: 0 12px;
       font-size: 12px;
     }
@@ -472,14 +473,12 @@ export default {
   &-right4 {
     .searchinput {
       :deep(input) {
-        height: 38px;
       }
       :deep(.el-input-group__append) {
         background: #909399;
         color: #ffffff;
         padding: 0 12px;
       }
-      height: 38px;
       width: 260px;
     }
   }
@@ -492,6 +491,7 @@ export default {
 }
 .gobtn {
   height: 40px;
-  margin-left: -4px;
+  margin-left: -1px;
+  border-radius: 0 4px 4px 0;
 }
 </style>
