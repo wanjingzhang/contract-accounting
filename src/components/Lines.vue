@@ -117,25 +117,30 @@
         :options="options"
       ></el-cascader>
 
-      <el-button class="gobtn" @click="Goto" type="info">Go</el-button>
+      <el-button class="gobtn" @click="Goto" type="primary">Go</el-button>
     </div>
     <!-- 2. 带有链接的右侧 -->
-    <div v-else-if="type === 'supplies'" class="rightcontainer-item-right2">
+    <div v-else-if="type === 'supplies'" class="rightcontainer-item-right5">
       <el-link
         v-if="links.RemindList !== ''"
-        class="forecastLink"
+        class="leftLink forecastLink"
         type="primary"
         :href="`${links.RemindList}${this._office}`"
         target="_blank"
-        >Remind List</el-link
+        :underline="false"
+        ><el-button class="forecastLink" plain type="primary"
+          >Remind List</el-button
+        ></el-link
       >
       <el-link
         v-if="links.SupplierList !== ''"
-        class="forecastLink"
         type="primary"
         :href="`${links.SupplierList}${this._office}`"
         target="_blank"
-        >Supplier List</el-link
+        :underline="false"
+        ><el-button class="forecastLink" plain type="primary"
+          >Supplier List</el-button
+        ></el-link
       >
     </div>
     <!-- 2. 带有链接的右侧 -->
@@ -143,13 +148,11 @@
       v-else-if="type === 'Forecast' && this.options.length > 0"
       class="rightcontainer-item-right2"
     >
-      <el-link
-        class="forecastLink"
-        type="primary"
-        :href="`${this.options[1]}`"
-        target="_blank"
-        >{{ this.options[0] }} Forecast</el-link
-      >
+      <el-link :underline="false" :href="`${this.options[1]}`" target="_blank">
+        <el-button plain class="forecastLink" type="primary">
+          {{ this.options[0] }}
+        </el-button>
+      </el-link>
     </div>
     <!-- 3. 空白的右侧 -->
     <div v-else-if="type === 'blank'" class="rightcontainer-item-right3"></div>
@@ -180,10 +183,13 @@
         placeholder="Searching by name or no."
         v-model="selectedProjectNo"
         filterable
+        :filter-method="searchstrHandler"
         clearable
         @change="close"
       ></el-cascader>
-      <el-button class="gobtn" @click="importProject" type="info">Go</el-button>
+      <el-button class="gobtn" @click="importProject" type="primary"
+        >Go</el-button
+      >
     </div>
     <!-- layzy load -->
     <div v-else-if="type === 'cascaderlazy'" class="rightcontainer-item-right">
@@ -195,10 +201,13 @@
         :options="hasProjectList"
         v-model="hasProjectNo"
         filterable
+        :filter-method="searchstrHandler"
         clearable
         @change="close2"
       ></el-cascader>
-      <el-button class="gobtn" @click="projectDetail" type="info">Go</el-button>
+      <el-button class="gobtn" @click="projectDetail" type="primary"
+        >Go</el-button
+      >
     </div>
   </div>
 </template>
@@ -277,14 +286,34 @@ export default {
     }
   },
   methods: {
+    searchstrHandler(node, val) {
+      // -1 || 大写
+      if (
+        !!~node.text.indexOf(val) ||
+        !!~node.text.toUpperCase().indexOf(val.toUpperCase())
+      ) {
+        return true;
+      }
+    },
     getImportedProject() {
       API.ProjectList(this._office, (res) => {
         let name,
           filt = [];
         if (res.length > 0) {
           for (let i = 0; i < res.length; i++) {
-            let { projectname, projectno } = res[i];
-            name = String(projectno).trim() + ":" + String(projectname).trim();
+            let { projectname, projectno, uno } = res[i];
+            uno = String(uno).trim();
+            if (uno != "0") {
+              name =
+                String(projectno).trim() +
+                "." +
+                uno +
+                ":" +
+                String(projectname).trim();
+            } else {
+              name =
+                String(projectno).trim() + ":" + String(projectname).trim();
+            }
             filt = this.hasProjectList.filter((item) => item.value == name);
 
             // 是否存在，在现有列表里，
@@ -378,7 +407,7 @@ export default {
 @keyframes move {
   0% {
     opacity: 0;
-    transform: translateX(20px);
+    transform: translateX(-20px);
   }
   100% {
     opacity: 1;
@@ -386,25 +415,25 @@ export default {
   }
 }
 .animation0 {
-  animation: move 0.5s forwards;
-}
-.animation1 {
-  animation: move 0.5s forwards 0.1s;
-}
-.animation2 {
-  animation: move 0.5s forwards 0.2s;
-}
-.animation3 {
-  animation: move 0.5s forwards 0.3s;
-}
-.animation4 {
-  animation: move 0.5s forwards 0.4s;
-}
-.animation5 {
   animation: move 0.5s forwards 0.5s;
 }
+.animation1 {
+  animation: move 0.5s forwards 0.7s;
+}
+.animation2 {
+  animation: move 0.5s forwards 0.8s;
+}
+.animation3 {
+  animation: move 0.5s forwards 0.9s;
+}
+.animation4 {
+  animation: move 0.5s forwards 1s;
+}
+.animation5 {
+  animation: move 0.5s forwards 1.1s;
+}
 .animation6 {
-  animation: move 0.5s forwards 0.6s;
+  animation: move 0.5s forwards 1.2s;
 }
 .rightcontainer-item {
   &:hover {
@@ -420,11 +449,11 @@ export default {
   font-size: 16px;
   transition: background-color 0.5s linear;
   border-radius: 4px;
-  margin: 2px 0;
+  margin: 0 0 4px 0;
+  background-color: rgba(255, 255, 255, 0.2);
   &-left {
     text-align: left;
-    font-size: 16px;
-    width: 240px;
+    width: 310px;
     &-team {
       color: var(--light-orange);
       line-height: 22px;
@@ -436,6 +465,8 @@ export default {
       width: 140px;
     }
     &-title {
+      font-size: 20px;
+      color: #000000;
       user-select: none;
     }
   }
@@ -444,19 +475,19 @@ export default {
     align-items: end;
     .goSelect {
       width: 203px;
-      :deep(.el-input) {
-        input {
-        }
-      }
+      box-shadow: 0px 4px 4px rgb(0 0 0 / 30%);
+      box-sizing: border-box;
+      line-height: 39px;
     }
     .gobtn {
+      box-shadow: 0px 4px 4px rgb(0 0 0 / 30%);
       padding: 0 12px;
       font-size: 12px;
     }
   }
   &-right2 {
     display: flex;
-    justify-content: space-between;
+    justify-content: right;
     width: 200px;
     :deep(.el-link) {
       font-size: 16px;
@@ -480,6 +511,12 @@ export default {
         padding: 0 12px;
       }
       width: 260px;
+    }
+  }
+  &-right5 {
+    display: flex;
+    .leftLink {
+      margin-right: 10px;
     }
   }
 }

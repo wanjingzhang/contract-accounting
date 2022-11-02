@@ -4,7 +4,8 @@
     <div class="bg abLT"></div>
     <!-- 标题部分 -->
     <div class="topbar">
-      <img class="topbar-logo" alt="test" src="./assets/logo_color.svg" />
+      <img class="topbar-logo pc" alt="test" src="./assets/logo_color.svg" />
+      <img class="topbar-logo mob" alt="test" src="./assets/logo.svg" />
     </div>
     <!-- cases -->
     <div class="cases abLB">
@@ -14,7 +15,7 @@
     </div>
 
     <!-- 内容部分 -->
-    <div class="content abCC">
+    <div :class="'content abCC' + showClass">
       <!-- 中间subtitle部分 -->
       <div class="subtitle">
         <h2>Contract Accounting</h2>
@@ -38,7 +39,11 @@
         </div>
       </div>
 
-      <TabComponent ref="tabs" />
+      <TabComponent ref="tabs" @hideMenu="hideMenu" />
+    </div>
+    <!-- 展开菜单按钮 -->
+    <div :class="'mobMenu ' + showClass" @click="showTabs">
+      <i class="el-icon-arrow-down icon"></i>
     </div>
   </div>
 </template>
@@ -75,9 +80,25 @@ export default {
       itemId: -1,
       projectLength: 5,
       imgs: imgs,
+      show: false,
+      showClass: "",
     };
   },
   methods: {
+    // mobile show tabs
+    showTabs() {
+      if (!this.show) {
+        this.showClass = " show";
+      } else {
+        this.showClass = "";
+      }
+      this.show = !this.show;
+      this.$refs.tabs.showMenu(this.show);
+    },
+    hideMenu(flag) {
+      this.showClass = flag;
+      this.show = false;
+    },
     addActive(id) {
       this.itemId = id;
     },
@@ -248,10 +269,12 @@ export default {
     },
     ImportList: function (str) {
       API.ImportProjectList(str, (res) => {
-        let opt7 = [];
+        let opt7 = [],
+          lab = "";
         for (let i = 0; i < res.length; i++) {
+          lab = `${res[i]["ProjectNo"]}:${res[i]["Projectname"]}`;
           opt7.push({
-            label: res[i]["ProjectNo"] + ":" + res[i]["Projectname"],
+            label: lab,
             value: String(res[i]["id"]).trim(),
           });
         }
@@ -342,22 +365,47 @@ export default {
   letter-spacing: 0.5px;
   position: relative;
   perspective: 500px;
+
+  .mobMenu {
+    display: none;
+    background-color: #ffffff;
+    padding: 4px 10px;
+    border-radius: 5px;
+    color: #ffffff;
+    position: fixed;
+    top: 4px;
+    right: 4px;
+    font-size: 0.8rem;
+    height: 18px;
+    line-height: 18px;
+    .icon {
+      transition: transform 0.3s;
+      color: #ff671f;
+    }
+  }
+
   .bg {
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: url("./assets/bg.jpg") no-repeat;
+    background: url("./assets/bg.svg") no-repeat;
     background-size: cover;
     background-position: center center;
   }
   .topbar {
     height: 80px;
     &-logo {
-      max-width: 360px;
+      max-width: 280px;
       min-width: 150px;
       height: 26px;
       float: right;
       margin: 20px 20px 0 0;
+      &.mob {
+        display: none;
+      }
+      &.pc {
+        display: block;
+      }
     }
   }
 
@@ -375,13 +423,13 @@ export default {
       transition: all 0.4s ease 0.1s;
       filter: brightness(0.9);
       transform: scale(1);
+      border: 4px solid #ffffff;
+      border-radius: 50%;
       img {
         width: 124px;
         height: 124px;
         margin: -2px 0 0 -2px;
         border-radius: 50%;
-        overflow: hidden;
-        border: 3px solid #ffffff;
       }
     }
   }
@@ -392,7 +440,7 @@ export default {
     position: relative;
     .subtitle {
       width: 800px;
-      height: 70px;
+      height: 100px;
       margin: 0 auto;
       user-select: none;
       :deep(.el-input__icon) {
@@ -401,7 +449,7 @@ export default {
         line-height: 28px;
       }
       h2 {
-        font-size: 32px;
+        font-size: 44px;
         color: #000000;
       }
       &-office {
@@ -435,134 +483,249 @@ export default {
 }
 </style>
 <style lang="less">
-:deep(.el-select-dropdown__item.selected) {
-  color: var(--light-orange) !important;
-}
-
+// 720P的分辨率为1280x720像素
 @media screen and (min-width: 0) and (max-width: 768px) {
-  .myCascader {
-    width: 90% !important;
-    left: 5% !important;
-  }
+  #app {
+    min-height: 600px;
+    .bg {
+      top: 40px;
+    }
+    .mobMenu {
+      display: block !important;
+      z-index: 5;
 
-  #app .topbar {
-    height: 60px !important;
-    .topbar-logo {
-      width: 80% !important;
-      margin: 4px 10% !important;
-    }
-  }
-
-  #app .rightcontainer-item {
-    padding: 5px 0 4px 10px;
-  }
-
-  #app .content {
-    width: 100% !important;
-    overflow: auto;
-  }
-  #app .no-border {
-    .el-input__inner {
-      font-size: 0.8rem;
-      width: 148px;
-    }
-  }
-  #app .content .subtitle {
-    width: 100% !important;
-    h2 {
-      font-size: 1.2rem !important;
-    }
-    &-office {
-      font-size: 0.8rem !important;
-    }
-    .el-input__icon {
-      font-size: 0.8rem !important;
-    }
-  }
-  #app .cases {
-    width: 98% !important;
-    bottom: -40px !important;
-    margin-left: 0 !important;
-    left: 0 !important;
-    .cases-item {
-      width: 16%;
-      img {
-        width: 100%;
-        height: auto;
+      &.show {
+        .icon {
+          transform: rotate(180deg);
+        }
       }
     }
-  }
-
-  #app .TabBox {
-    width: 100% !important;
-    .Tabs {
-      margin: 0;
-    }
-    .leftpanel {
-      width: 20% !important;
-      overflow: hidden;
-      padding: 10px 0;
-      .item {
-        font-size: 1.8rem;
-        padding: 0 2px;
-        height: auto;
-        margin: 0 0 20px 0;
-      }
-      .item-tail {
-        font-size: 0.6rem;
-        width: 34px;
-        display: inline-block;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        word-wrap: break-word;
-        display: inline-block;
-      }
-      .item-ball {
-        width: 95%;
-        margin-left: 5%;
-        height: 2.6rem;
-        left: -4px;
-        border-radius: 4px;
-      }
-
-      .item.active {
-        .item-ball {
-          animation: changeStatus 0.3s forwards ease-out;
+    .topbar {
+      height: 60px !important;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      &-logo {
+        width: 80% !important;
+        margin: 4px 10% !important;
+        &.mob {
+          display: block !important;
+        }
+        &.pc {
+          display: none !important;
         }
       }
     }
 
-    .rightcontainer {
-      width: 80% !important;
+    .content {
+      width: 100% !important;
+      min-height: 600px !important;
+      top: calc(50% + 40px) !important;
+      overflow: auto;
+      &.show {
+        position: absolute;
+        height: 100%;
+      }
+      .subtitle {
+        width: 100% !important;
+        height: auto !important;
+        h2 {
+          font-size: 1.4rem !important;
+        }
+        &-office {
+          font-size: 0.8rem !important;
+        }
+        .el-input__icon {
+          font-size: 0.8rem !important;
+        }
+      }
     }
-    .rightcontainer-item-left {
-      width: 50% !important;
-      &-title {
-        font-size: 0.8rem;
+    .cases {
+      margin-left: 0 !important;
+      left: 0 !important;
+      width: 100% !important;
+      min-width: 300px;
+      .cases-item {
+        width: 50px;
+        height: 50px;
+        border: 2px solid #ffffff;
+        img {
+          width: 100%;
+          height: 100%;
+          margin: 0;
+        }
       }
     }
 
-    .rightcontainer-item-right2 {
-      justify-content: right;
-      padding-right: 8px;
-      .forecastLink {
-        font-size: 0.8rem;
+    .TabBox {
+      width: 100% !important;
+
+      .Tabs {
+        margin: 0;
+        position: relative;
+      }
+      .leftpanel {
+        width: 20% !important;
+        padding: 10px 0;
+        display: none;
+
+        &.show {
+          display: block;
+          opacity: 1;
+          transition: opacity 0.2s;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100% !important;
+          height: 100% !important;
+          background: #ffffff;
+          z-index: 2;
+        }
+        .item {
+          padding: 0 2px;
+          height: auto;
+          line-height: 2rem;
+          margin: 0 0 10px 0;
+        }
+        .item-capital {
+          font-size: 1.2rem;
+          width: 94%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          word-wrap: break-word;
+          display: inline-block;
+          text-align: center;
+        }
+        .item-ball {
+          width: 95%;
+          margin-left: 5%;
+          height: 1.6rem;
+          left: -4px;
+          border-radius: 4px;
+        }
+
+        .item.active {
+          .item-ball {
+            animation: changeStatus 0.3s forwards ease-out;
+          }
+        }
+      }
+
+      .rightcontainer {
+        width: 100% !important;
+      }
+      .rightcontainer-item-left {
+        width: 50% !important;
+        &-title {
+          font-size: 1rem;
+          font-weight: 500;
+        }
+      }
+
+      .rightcontainer-item-right2 {
+        justify-content: right;
+        padding-right: 8px;
+        .forecastLink {
+          font-size: 0.8rem;
+        }
+      }
+      .rightcontainer-item-right {
+        width: 50% !important;
+        height: 40px;
+        box-sizing: border-box;
+        .gobtn {
+          height: 100%;
+          box-sizing: border-box;
+          width: 40px !important;
+        }
+        .goSelect {
+          height: 100%;
+          box-sizing: border-box;
+          width: calc(100% - 50px) !important;
+        }
+      }
+      .rightcontainer-item-right5 {
+        flex-direction: column;
+        align-items: center;
+        width: 50%;
+        .leftLink {
+          margin-right: 0;
+        }
+        .forecastLink {
+          width: 120px;
+        }
+      }
+      .rightcontainer-item-right2 {
+        justify-content: center;
       }
     }
-    .rightcontainer-item-right {
-      width: 50% !important;
-      height: 40px;
-      box-sizing: border-box;
-      .gobtn {
-        height: 100%;
-        box-sizing: border-box;
-        width: 40px !important;
+    .rightcontainer-item {
+      padding: 5px 0 4px 10px;
+    }
+    .no-border {
+      .el-input__inner {
+        font-size: 0.8rem;
+        width: 148px;
       }
-      .goSelect {
-        height: 100%;
-        box-sizing: border-box;
-        width: calc(100% - 50px) !important;
+    }
+  }
+  .myCascader {
+    width: 90% !important;
+    left: 5% !important;
+  }
+}
+:deep(.el-select-dropdown__item.selected) {
+  color: var(--light-orange) !important;
+}
+
+@media screen and (min-width: 768px) and (max-width: 1280px) {
+  #app {
+    min-height: 750px;
+    .content {
+      min-height: 600px !important;
+      .TabBox .Tabs .leftpanel .item-capital {
+        font-size: 16px;
+      }
+    }
+  }
+}
+// 1080P的分辨率为1920*1080像素
+
+// 2k的分辨率为2560*1440像素
+
+// 4k的分辨率为3840*2160像素
+
+// 8K的分辨率为7680×4320像素
+
+@media screen and (min-width: 1280px) and (max-width: 3840px) {
+  #app {
+    min-height: 750px;
+  }
+  #app .content {
+    width: 920px !important;
+    min-height: 600px !important;
+    .subtitle {
+      height: 160px !important;
+    }
+    .TabBox {
+      width: 100% !important;
+      .Tabs {
+        display: flex;
+        justify-content: space-around;
+        .leftpanel {
+          width: 24% !important;
+        }
+        .rightcontainer {
+          width: 74% !important;
+          &-item-left {
+            width: 60% !important;
+          }
+          &-item-left-title {
+            width: 100% !important;
+          }
+        }
       }
     }
   }

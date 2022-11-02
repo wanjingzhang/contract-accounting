@@ -1,24 +1,26 @@
 <template>
   <div class="TabBox">
     <div class="Tabs">
-      <div class="leftpanel">
+      <div :class="'leftpanel' + (show ? ' show' : '')">
         <div
           v-for="(value, i) in menus"
           :class="'item ' + (id == i ? 'active' : '')"
           :key="i"
-          @click="changeId(i)"
+          @click="changeId($event, i)"
         >
-          <div :ref="'ball' + i" class="item-ball abLT"></div>
-          <span class="item-capital">{{ value.charAt(0) }}</span>
-          <span class="item-tail">{{ value.substring(1, value.length) }}</span>
+          <div class="item-bg abLT"></div>
+          <span class="item-capital">{{ value }}</span>
         </div>
       </div>
-      <div class="rightcontainer">
+      <div
+        class="rightcontainer"
+        :style="'transform: translateY(' + y + 'px);'"
+      >
         <!-- 1. Editing -->
         <div v-show="id === 0" class="rightcontainer-box">
           <!-- Tab 1-1 import project list -->
           <TabLineComponent
-            title="XXXXXXX"
+            title="Import Project to Contract Accounting"
             type="cascader"
             animation="0"
             :options="this._options7"
@@ -42,7 +44,7 @@
           <!-- Tab 1-2 updating the project info -->
           <TabLineComponent
             ref="imported"
-            title="XXXXXXX"
+            title="Edit Project Information"
             type="cascaderlazy"
             animation="1"
             :options="[]"
@@ -477,6 +479,7 @@ export default {
       visible: false,
       id: 0,
       value2: "",
+      show: false,
       menus: [
         "Editing",
         "Reminder",
@@ -485,6 +488,7 @@ export default {
         "E-approval",
         "Advanced Search",
       ],
+      y: 0,
     };
   },
   computed: {
@@ -514,26 +518,31 @@ export default {
     },
   },
   methods: {
+    showMenu(flag) {
+      this.show = flag;
+    },
     // 接受新的office
     updated(city) {
       this.$refs.imported.updated(city);
     },
     // 接受新插入的项目
     receive(name) {
-      console.log("p[" + name);
       this.$refs.imported.importedName(name);
     },
-    changeId(newId) {
+    changeId(e, newId) {
+      let y = e.currentTarget.offsetTop;
       if (newId !== this.id) {
-        this.id = newId;
-      }
-
-      if (newId == 5) {
-        console.log(newId);
-        window.open(
-          `https://kcapp.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this._office}`,
-          "_blank"
-        );
+        if (newId == 5) {
+          window.open(
+            `https://kcapp.test.com/invoiceaspx/Pro_Finance/default_1.aspx?officeid=${this._office}`,
+            "_blank"
+          );
+        } else {
+          this.id = newId;
+          this.y = y;
+          this.show = false;
+          this.$emit("hideMenu", "");
+        }
       }
     },
   },
@@ -548,47 +557,41 @@ export default {
   margin: 0 auto;
   height: 430px;
   width: 800px;
+  position: relative;
 
   .Tabs {
-    margin: 20px auto;
+    margin: 0 auto;
 
     .leftpanel {
-      width: 210px;
+      width: 190px;
       float: left;
       .item {
-        font-size: 28px;
+        font-size: 20px;
+        line-height: 60px;
         font-weight: 600;
         position: relative;
         text-align: left;
         height: 60px;
         &-capital {
-          color: #ff671f;
+          color: #000000;
           cursor: pointer;
-          transition: color 0.2s;
-        }
-        &-tail {
-          color: var(--black);
-          font-size: 20px;
-          cursor: pointer;
+          padding: 10px 20px;
           user-select: none;
         }
-        &-ball {
-          left: -10px;
-          top: -2px;
-          background-color: var(--white);
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
+        &-bg {
+          transition: width 0.5s;
+          background-color: rgb(255, 103, 31, 0.8);
+          width: 0;
+          height: 100%;
           z-index: -1;
-          transition: all 5s;
         }
 
         &.active {
+          .item-bg {
+            width: 100%;
+          }
           .item-capital {
             color: var(--white);
-          }
-          .item-ball {
-            animation: changeStatus 0.4s forwards ease-out;
           }
         }
       }
