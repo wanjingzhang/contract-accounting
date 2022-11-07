@@ -128,7 +128,7 @@
         :href="`${links.RemindList}${this._office}`"
         target="_blank"
         :underline="false"
-        ><el-button class="forecastLink" plain type="primary"
+        ><el-button class="forecastLink" type="primary"
           >Remind List</el-button
         ></el-link
       >

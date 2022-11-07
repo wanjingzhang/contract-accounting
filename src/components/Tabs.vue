@@ -4,7 +4,7 @@
       <div :class="'leftpanel' + (show ? ' show' : '')">
         <div
           v-for="(value, i) in menus"
-          :class="'item ' + (id == i ? 'active' : '')"
+          :class="'item item' + i + ' ' + (id == i ? 'active' : '')"
           :key="i"
           @click="changeId($event, i)"
         >
@@ -16,6 +16,7 @@
         class="rightcontainer"
         :style="'transform: translateY(' + y + 'px);'"
       >
+        <div class="mob-tips">{{ menus[id] }}</div>
         <!-- 1. Editing -->
         <div v-show="id === 0" class="rightcontainer-box">
           <!-- Tab 1-1 import project list -->
@@ -572,6 +573,7 @@ export default {
         position: relative;
         text-align: left;
         height: 60px;
+        cursor: pointer;
         &-capital {
           color: #000000;
           cursor: pointer;
@@ -600,6 +602,9 @@ export default {
     .rightcontainer {
       width: 590px;
       float: left;
+      .mob-tips {
+        display: none;
+      }
     }
     .SearchBox {
       right: 24px;

@@ -43,7 +43,8 @@
     </div>
     <!-- 展开菜单按钮 -->
     <div :class="'mobMenu ' + showClass" @click="showTabs">
-      <i class="el-icon-arrow-down icon"></i>
+      <div class="line line1"></div>
+      <div class="line line3"></div>
     </div>
   </div>
 </template>
@@ -302,7 +303,10 @@ export default {
   },
   watch: {
     value: _.throttle(async function () {
-      loadingInstance = Loading.service({ fullscreen: true });
+      loadingInstance = Loading.service({
+        fullscreen: true,
+        background: "transparent",
+      });
       // 6. 获取添加列表
       this.ImportList(this.value);
 
@@ -368,19 +372,29 @@ export default {
 
   .mobMenu {
     display: none;
-    background-color: #ffffff;
-    padding: 4px 10px;
-    border-radius: 5px;
-    color: #ffffff;
     position: fixed;
-    top: 4px;
-    right: 4px;
-    font-size: 0.8rem;
-    height: 18px;
-    line-height: 18px;
-    .icon {
-      transition: transform 0.3s;
-      color: #ff671f;
+    top: 0;
+    left: 2px;
+    background-color: transparent;
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    user-select: none;
+    .line {
+      width: 22px;
+      height: 2px;
+      background-color: #000;
+      position: absolute;
+      left: 9px;
+
+      &.line1 {
+        top: 12px;
+        transition: all 0.3s;
+      }
+      &.line3 {
+        top: 24px;
+        transition: all 0.3s;
+      }
     }
   }
 
@@ -394,6 +408,8 @@ export default {
   }
   .topbar {
     height: 80px;
+    user-select: none;
+    pointer-events: none;
     &-logo {
       max-width: 280px;
       min-width: 150px;
@@ -401,6 +417,7 @@ export default {
       float: right;
       margin: 20px 20px 0 0;
       &.mob {
+        height: 30px;
         display: none;
       }
       &.pc {
@@ -454,7 +471,6 @@ export default {
       }
       &-office {
         font-size: 24px;
-        font-weight: 600;
         line-height: 40px;
         display: flex;
         justify-content: center;
@@ -477,7 +493,6 @@ export default {
     color: var(--light-orange);
     background: transparent !important;
     font-size: 24px;
-    font-weight: 600;
     width: 200px;
   }
 }
@@ -489,14 +504,27 @@ export default {
     min-height: 600px;
     .bg {
       top: 40px;
+      z-index: -1;
+      width: 100% !important;
+      height: 100% !important;
+      background: url("./assets/bg_m2.jpg") no-repeat !important;
+      background-size: cover !important;
+      background-position: center center !important;
     }
     .mobMenu {
       display: block !important;
       z-index: 5;
 
       &.show {
-        .icon {
-          transform: rotate(180deg);
+        .line1 {
+          transform-origin: right center;
+          transform: rotate(-45deg);
+          top: 12px !important;
+        }
+        .line3 {
+          transform-origin: right center;
+          transform: rotate(45deg);
+          top: 28px !important;
         }
       }
     }
@@ -504,13 +532,15 @@ export default {
       height: 60px !important;
       position: absolute;
       top: 0;
-      left: 0;
+      right: 0;
       z-index: 10;
       &-logo {
         width: 80% !important;
         margin: 4px 10% !important;
         &.mob {
           display: block !important;
+          float: right;
+          margin: 4px 10px !important;
         }
         &.pc {
           display: none !important;
@@ -530,6 +560,7 @@ export default {
       .subtitle {
         width: 100% !important;
         height: auto !important;
+        margin: 20px auto 0 auto !important;
         h2 {
           font-size: 1.4rem !important;
         }
@@ -568,65 +599,93 @@ export default {
       .leftpanel {
         width: 20% !important;
         padding: 10px 0;
+        overflow: hidden;
         display: none;
 
         &.show {
-          display: block;
-          opacity: 1;
-          transition: opacity 0.2s;
           position: fixed;
           top: 0;
           left: 0;
           width: 100% !important;
-          height: 100% !important;
+          display: block;
+          animation: heightAni 0.5s forwards;
+
           background: #ffffff;
           z-index: 2;
+          .item {
+            opacity: 0;
+          }
+          .item0 {
+            animation: showToBtm 0.2s forwards 0.2s;
+          }
+          .item1 {
+            animation: showToBtm 0.2s forwards 0.3s;
+          }
+          .item2 {
+            animation: showToBtm 0.2s forwards 0.4s;
+          }
+          .item3 {
+            animation: showToBtm 0.2s forwards 0.5s;
+          }
+          .item4 {
+            animation: showToBtm 0.2s forwards 0.6s;
+          }
+          .item5 {
+            animation: showToBtm 0.2s forwards 0.8s;
+          }
         }
         .item {
           padding: 0 2px;
-          height: auto;
-          line-height: 2rem;
-          margin: 0 0 10px 0;
-        }
-        .item-capital {
-          font-size: 1.2rem;
-          width: 94%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          word-wrap: break-word;
-          display: inline-block;
-          text-align: center;
-        }
-        .item-ball {
-          width: 95%;
-          margin-left: 5%;
-          height: 1.6rem;
-          left: -4px;
-          border-radius: 4px;
-        }
+          &-capital {
+            font-size: 1.2rem;
+            width: 94%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-wrap: break-word;
+            display: inline-block;
+            text-align: center;
+            padding: 0 20px;
+          }
+          &-ball {
+            width: 95%;
+            margin-left: 5%;
+            height: 1.6rem;
+            left: -4px;
+            border-radius: 4px;
+          }
 
-        .item.active {
-          .item-ball {
-            animation: changeStatus 0.3s forwards ease-out;
+          &.active {
+            .item-ball {
+              animation: changeStatus 0.3s forwards ease-out;
+            }
           }
         }
       }
 
       .rightcontainer {
         width: 100% !important;
-      }
-      .rightcontainer-item-left {
-        width: 50% !important;
-        &-title {
-          font-size: 1rem;
-          font-weight: 500;
+        transform: none !important;
+        &-item-left {
+          width: 50% !important;
+          &-title {
+            font-size: 1rem;
+            font-weight: 500;
+          }
+        }
+        .mob-tips {
+          display: block;
+          font-size: 0.8rem;
+          line-height: 1rem;
+          font-weight: 600;
+          color: #000000;
+          margin-bottom: 24px;
         }
       }
 
       .rightcontainer-item-right2 {
         justify-content: right;
-        padding-right: 8px;
+        padding-right: 10px;
         .forecastLink {
           font-size: 0.8rem;
         }
@@ -648,21 +707,23 @@ export default {
       }
       .rightcontainer-item-right5 {
         flex-direction: column;
-        align-items: center;
+        align-items: end;
+        padding-right: 10px;
         width: 50%;
         .leftLink {
           margin-right: 0;
+          margin-bottom: 4px;
         }
         .forecastLink {
           width: 120px;
         }
       }
       .rightcontainer-item-right2 {
-        justify-content: center;
+        justify-content: right;
       }
     }
     .rightcontainer-item {
-      padding: 5px 0 4px 10px;
+      padding: 8px 0 8px 10px;
     }
     .no-border {
       .el-input__inner {
@@ -672,8 +733,8 @@ export default {
     }
   }
   .myCascader {
-    width: 90% !important;
-    left: 5% !important;
+    max-width: 97% !important;
+    margin-left: 1% !important;
   }
 }
 :deep(.el-select-dropdown__item.selected) {
