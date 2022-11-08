@@ -115,7 +115,9 @@
         placeholder="Select"
         v-model="value"
         :options="options"
-      ></el-cascader>
+        no-data-text="no data available"
+      >
+      </el-cascader>
 
       <el-button class="gobtn" @click="Goto" type="primary">Go</el-button>
     </div>
@@ -181,6 +183,7 @@
         popper-class="myCascader"
         :options="_optionsImported"
         placeholder="Searching by name or no."
+        empty-text="no data available"
         v-model="selectedProjectNo"
         filterable
         :filter-method="searchstrHandler"
@@ -198,6 +201,7 @@
         class="goSelect"
         popper-class="myCascader"
         placeholder="Searching by name or no."
+        empty-text="no data available"
         :options="hasProjectList"
         v-model="hasProjectNo"
         filterable

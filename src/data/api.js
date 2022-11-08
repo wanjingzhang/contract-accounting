@@ -1,5 +1,6 @@
 // 1、导入axios
 import axios from "axios";
+import { getCookie } from "@/utils/tools";
 
 // 2、配置请求根路径
 // axios.defaults.baseURL = "https://kcapi.test.com";
@@ -8,15 +9,22 @@ import axios from "axios";
 
 const API = {};
 // 配置请求拦截器
-axios.interceptors.request.use((config) => {
-  // 调用Loading组件的service()方法，创建Loading组件的实例，并全屏展示 loading 效果
 
-  // 配置 Token 认证
-  config.headers.Authorization = "Bearer xxx";
-  // console.log(config);
-  // 这是固定写法，一定要return出去
-  return config;
-});
+API.setToken = async () => {
+  axios.interceptors.request.use((config) => {
+    // 调用Loading组件的service()方法，创建Loading组件的实例，并全屏展示 loading 效果
+
+    // 配置 Token 认证
+    let token = getCookie("accessToken");
+    if (token != undefined && token.length > 0) {
+      config.headers.Authorization = "Bearer " + token;
+      config.headers["content-type"] =
+        "application/x-www-form-urlencoded;charset=UTF-8";
+    }
+    // 这是固定写法，一定要return出去
+    return config;
+  });
+};
 
 // 配置响应拦截器
 axios.interceptors.response.use(
@@ -99,6 +107,28 @@ API.ProjectList = async (str, callback) => {
     console.log(e);
   }
 };
+
+// 9. JSON body 传入 username 和 userpwd, 如验证成功则返回token, 否则返回 username password incorrect，进行比较的用户名字段是 AD_account (所有用户默认密码是： welcome4321)a
+API.Login = async (data, callback) => {
+  const { data: res } = await axios.post(`/dbapi/CAToken/login`, data);
+  callback(res);
+};
+
+// 10. 无参数，清除token
+API.Logout = async (callback) => {
+  const { data: res } = await axios.delete(`/dbapi/CAToken/logout`);
+  callback(res);
+};
+
+// 11. 此Get 方法更新数据库，传入 rowguid 和 userpassword 2个参数， 根据 rowguid 更新用户密码
+API.Updatepassword = async (rowguid, userpassword, callback) => {
+  const { data: res } = await axios.get(
+    `/dbapi/capassupdate?rowguid=${rowguid}&userpassword=${userpassword}`
+  );
+  callback(res);
+};
+
+API.setToken();
 
 // 向外暴露 API
 export default API;

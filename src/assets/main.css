@@ -21,6 +21,19 @@ html,
   --black: #000000;
 }
 
+.full {
+  width: 100%;
+  height: 100%;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
 .abCC {
   position: absolute;
   left: 50%;
