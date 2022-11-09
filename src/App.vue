@@ -15,43 +15,124 @@
     </div>
 
     <!-- Login 登录 -->
-    <LoginPop v-if="token.length == 0" class="abCC" @login="loginHandler" />
+    <LoginPop
+      ref="pop"
+      v-if="token.length == 0"
+      class="abCC"
+      @poploginHandler="poploginHandler"
+    />
     <!-- Index 首页 -->
-    <IndexPgVue v-else-if="token.length > 0" />
+    <IndexPgVue
+      ref="indx"
+      :token="token"
+      :officeid="office"
+      v-else-if="token.length > 0"
+      @needLogin="goLoginHandler"
+    />
+
+    <!-- 按钮组 -->
+    <div class="btnsGroup abRC" v-if="token.length > 0">
+      <div class="full bgc abLT"></div>
+      <div class="icon icon1">
+        <div class="item"></div>
+        <span class="text">Change password</span>
+      </div>
+      <div class="icon icon2" @click="quitHandler">
+        <div class="item"></div>
+        <span class="text">Quit</span>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { getCookie } from "./utils/tools.js";
+import API from "./data/api";
+import {
+  clearLocalStorage,
+  getLocalStorage,
+  setLocalStorage,
+} from "./utils/tools.js";
 import IndexPgVue from "./components/IndexPg.vue";
 import LoginPop from "./components/LogPop.vue";
+import keyimg from "./assets/key.svg";
+import quitimg from "./assets/quit.svg";
 import img1 from "./assets/btns/1.jpg";
 import img2 from "./assets/btns/2.jpg";
 import img3 from "./assets/btns/3.jpg";
 import img4 from "./assets/btns/4.jpg";
 import img5 from "./assets/btns/5.jpg";
 const imgs = [img1, img2, img3, img4, img5];
+const btns = [keyimg, quitimg];
 
 export default {
   name: "App",
   data: () => {
     return {
       token: "",
+      office: "_",
       imgs: imgs,
+      btns: btns,
       projectLength: 5,
     };
   },
   methods: {
-    loginHandler(flag, token) {
+    // 弹窗完成后回调
+    poploginHandler(flag, token, office) {
       if (flag) {
+        this.successLogin(token, office);
+      }
+    },
+    goLoginHandler() {
+      this.token = "";
+      this.office = "";
+      clearLocalStorage();
+    },
+    successLogin(token, office) {
+      this.token = token;
+      API.setToken();
+      this.Offices(office, token);
+    },
+    quitHandler() {
+      API.Logout((res) => {
+        if (res.code == 200) {
+          console.log("quit");
+          setLocalStorage("testLogin", false);
+
+          this.$message.info(res.message);
+          this.goLoginHandler();
+        }
+      });
+    },
+    // 获取全球办公室列表
+    async Offices(office, token) {
+      let data = await API.Offices(token);
+      // 如果没有的话，就是未登录
+      if (data == "") {
+        this.token = "";
+      } else {
         this.token = token;
+        // 等待更新office
+        setTimeout(() => {
+          this.office = office;
+          setLocalStorage("testLogin", true);
+        }, 600);
       }
     },
   },
-  mounted() {
-    let accessToken = getCookie("accessToken");
-    if (accessToken?.length > 10) {
-      this.token = accessToken;
+  async mounted() {
+    // get storage
+    let accessToken = getLocalStorage("accessToken");
+    let office = getLocalStorage("testoffice");
+
+    // if has token， verify the token
+    if (accessToken?.length > 0 && office.length > 0) {
+      // 测试API调用
+      this.Offices(office, accessToken);
+    }
+  },
+  unmounted() {
+    if (!getLocalStorage("testrember")) {
+      setLocalStorage("testLogin", false);
     }
   },
   components: {
@@ -124,6 +205,80 @@ export default {
         height: 124px;
         margin: -2px 0 0 -2px;
         border-radius: 50%;
+      }
+    }
+  }
+
+  .btnsGroup {
+    width: 210px;
+    height: 100px;
+    &::after {
+      content: " ";
+      display: block;
+      width: 100%;
+      height: 1px;
+      background-color: #e7e7e7;
+      position: absolute;
+      left: 0;
+      top: 50px;
+    }
+    transition: transform 0.6s;
+    transform: translateX(157px);
+
+    &:hover {
+      transform: translateX(0);
+    }
+    .bgc {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px 0 0 10px;
+      background-color: rgba(255, 255, 255, 0.6);
+      z-index: -1;
+    }
+    .icon {
+      width: 100%;
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      cursor: pointer;
+      .item {
+        width: 30px;
+        height: 30px;
+        background-size: contain;
+      }
+      .text {
+        line-height: 50px;
+        margin-right: 10px;
+      }
+
+      &:hover {
+        .text {
+          color: #ff671f;
+        }
+      }
+    }
+
+    .icon1 {
+      .item {
+        margin: 10px 16px;
+        background: url(./assets/key.svg) no-repeat;
+      }
+      &:hover {
+        .item {
+          background: url(./assets/key2.svg) no-repeat;
+        }
+      }
+    }
+
+    .icon2 {
+      .item {
+        margin: 11px 19px 0 13px;
+        background: url(./assets/quit.svg) no-repeat;
+      }
+      &:hover {
+        .item {
+          background: url(./assets/quit2.svg) no-repeat;
+        }
       }
     }
   }

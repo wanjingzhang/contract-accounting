@@ -6,26 +6,12 @@
       <div class="subtitle">
         <h2>Contract Accounting</h2>
         <div class="subtitle-office">
-          <el-select
-            type="warning"
-            class="no-border"
-            v-model="value"
-            filterable
-            placeholder="Select"
-          >
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.value"
-            >
-            </el-option>
-          </el-select>
+          <span class="city">{{ officeid }}</span>
           <span>office</span>
         </div>
       </div>
 
-      <TabComponent ref="tabs" @hideMenu="hideMenu" />
+      <TabComponent ref="tabs" :token="token" @hideMenu="hideMenu" />
     </div>
     <!-- 展开菜单按钮 -->
     <div :class="'mobMenu ' + showClass" @click="showTabs">
@@ -47,8 +33,7 @@ export default {
   name: "App",
   data: () => {
     return {
-      options: [],
-      value: "",
+      office: "",
       options2: [], // Project Director & Director
       options3: [], // E approval PO 1 & PO 2 & GW
       options4: [], // E approval Payment PO 1 & PO 2 & GW
@@ -59,10 +44,13 @@ export default {
 
       searchStr: "",
       itemId: -1,
-
       show: false,
       showClass: "",
     };
+  },
+  props: {
+    token: String,
+    officeid: String,
   },
   methods: {
     // mobile show tabs
@@ -81,19 +69,6 @@ export default {
     },
     addActive(id) {
       this.itemId = id;
-    },
-    // 获取全球办公室列表
-    async Offices() {
-      let data = await API.Offices();
-      let opts = [];
-      for (let i = 0; i < data.length; i++) {
-        opts.push({
-          value: data[i].officeid,
-          label: data[i].officeid,
-        });
-      }
-      this.value = "Shanghai";
-      this.options = opts;
     },
     async Managers(str) {
       let datas = await API.Managers(str);
@@ -267,59 +242,41 @@ export default {
         "_blank"
       );
     },
-    // H5 plus事件处理
-    plusReady: function () {
-      // 设置系统状态栏背景为红色
-      var type =
-        navigator.userAgent.match(/(iPad).*OS\s([\d_]+)/) ||
-        navigator.userAgent.match(/(iPhone\sOS)\s([\d_]+)/);
-      if (type == "iOS") {
-        navigator.setStatusBarBackground("#368CBD");
-      } else {
-        navigator.setStatusBarBackground("#ddd");
-      }
-    },
   },
   watch: {
-    value: _.throttle(async function () {
-      loadingInstance = Loading.service({
-        fullscreen: true,
-        background: "transparent",
-      });
-      // 6. 获取添加列表
-      this.ImportList(this.value);
+    officeid: _.throttle(async function () {
+      if (this.token.length > 0) {
+        loadingInstance = Loading.service({
+          fullscreen: true,
+          background: "transparent",
+        });
+        // 6. 获取添加列表
+        this.ImportList(this.officeid);
 
-      // 1. 获取管理员列表
-      let opt2 = await this.Managers(this.value);
-      this.options2 = opt2;
-      loadingInstance.close();
+        // 1. 获取管理员列表
+        let opt2 = await this.Managers(this.officeid);
+        this.options2 = opt2;
+        loadingInstance.close();
 
-      // 2. 获取E-approval
-      this.Eapproval(this.value);
-      // 3. 获取E-approval
-      this.Payment(this.value);
+        // 2. 获取E-approval
+        this.Eapproval(this.officeid);
+        // 3. 获取E-approval
+        this.Payment(this.officeid);
 
-      // 4. 获取options
-      this.ForecastList();
+        // 4. 获取options
+        this.ForecastList();
 
-      // 5. 获取珠三角Teaminfo
-      this.TeaminfoZSJ();
+        // 5. 获取珠三角Teaminfo
+        this.TeaminfoZSJ();
 
-      // 6. office 修改时，需要向下传递到组件
-      this.$refs.tabs.updated(this.value);
+        // 6. officeid 修改时，需要向下传递到组件
+        this.$refs.tabs.updated(this.officeid);
+      }
     }, 1000),
-  },
-  mounted() {
-    this.Offices();
-    if (window.plus) {
-      this.plusReady();
-    } else {
-      document.addEventListener("plusready", this.plusReady, false);
-    }
   },
   provide: function () {
     return {
-      office: () => this.value,
+      office: () => this.officeid,
       options2: () => this.options2,
       options3: () => this.options3,
       options4: () => this.options4,
@@ -382,10 +339,11 @@ export default {
     height: 100px;
     margin: 0 auto;
     user-select: none;
-    :deep(.el-input__icon) {
+    :deep(.el-input__icon),
+    .city {
       color: #ff671f;
       font-size: 24px;
-      line-height: 28px;
+      margin-right: 20px;
     }
     h2 {
       font-size: 44px;

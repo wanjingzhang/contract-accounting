@@ -115,7 +115,6 @@
         placeholder="Select"
         v-model="value"
         :options="options"
-        no-data-text="no data available"
       >
       </el-cascader>
 
@@ -271,7 +270,7 @@ export default {
         });
         if (hasary.length > 0) {
           let obj = ary.splice(id, 1);
-          console.log(obj);
+          obj;
         }
       }
       return ary;
@@ -300,33 +299,35 @@ export default {
       }
     },
     getImportedProject() {
-      API.ProjectList(this._office, (res) => {
-        let name,
-          filt = [];
-        if (res.length > 0) {
-          for (let i = 0; i < res.length; i++) {
-            let { projectname, projectno, uno } = res[i];
-            uno = String(uno).trim();
-            if (uno != "0") {
-              name =
-                String(projectno).trim() +
-                "." +
-                uno +
-                ":" +
-                String(projectname).trim();
-            } else {
-              name =
-                String(projectno).trim() + ":" + String(projectname).trim();
-            }
-            filt = this.hasProjectList.filter((item) => item.value == name);
+      this._office != "" &&
+        API.ProjectList(this._office, (res) => {
+          let name,
+            filt = [];
 
-            // 是否存在，在现有列表里，
-            if (filt.length === 0) {
-              this.hasProjectList.push({ label: name, value: projectname });
+          if (res != "" && res.length > 0) {
+            for (let i = 0; i < res.length; i++) {
+              let { projectname, projectno, uno } = res[i];
+              uno = String(uno).trim();
+              if (uno != "0") {
+                name =
+                  String(projectno).trim() +
+                  "." +
+                  uno +
+                  ":" +
+                  String(projectname).trim();
+              } else {
+                name =
+                  String(projectno).trim() + ":" + String(projectname).trim();
+              }
+              filt = this.hasProjectList.filter((item) => item.value == name);
+
+              // 是否存在，在现有列表里，
+              if (filt.length === 0) {
+                this.hasProjectList.push({ label: name, value: projectname });
+              }
             }
           }
-        }
-      });
+        });
     },
     close() {
       this.$refs.cascader.dropDownVisible = false; //监听值发生变化就关闭它
@@ -392,7 +393,6 @@ export default {
     }),
     // 导入项目名称
     importedName(name) {
-      console.log("come on");
       this.hasProjectList.unshift({ label: name, value: name.split(":")[1] });
     },
     // 更新city

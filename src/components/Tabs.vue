@@ -47,6 +47,7 @@
             ref="imported"
             title="Edit Project Information"
             type="cascaderlazy"
+            :token="token"
             animation="1"
             :options="[]"
             :links="{
@@ -491,6 +492,9 @@ export default {
       ],
       y: 0,
     };
+  },
+  props: {
+    token: String,
   },
   computed: {
     _office() {

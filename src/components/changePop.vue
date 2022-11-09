@@ -1,37 +1,23 @@
 <template>
   <div class="logpop">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" status-icon>
-      <el-form-item label="User Name" prop="testname">
-        <el-input
-          v-model="ruleForm.testname"
-          label-position="top"
-          placeholder="please input user name"
-          autoComplete="off"
-          class="popupinput"
-        ></el-input>
-      </el-form-item>
       <el-form-item label="Password" prop="testpass">
         <el-input
           v-model="ruleForm.testpass"
           label-position="top"
           placeholder="**********"
+          type="password"
           class="popupinput"
-          auto-complete="new-password"
-          readonly
-          onfocus="this.removeAttribute('readonly');"
-          show-password
         ></el-input>
       </el-form-item>
-      <el-form-item>
-        <el-col :span="8" class="left"
-          ><el-checkbox v-model="ruleForm.rememberChecked"
-            >Remember Me</el-checkbox
-          ></el-col
-        >
-        <el-col class="line" :span="7"><span>&nbsp;</span></el-col>
-        <el-col :span="9" class="right"
-          ><el-link>Forgot Password</el-link></el-col
-        >
+      <el-form-item label="Repeat Password" prop="testpass2">
+        <el-input
+          v-model="ruleForm.testpass"
+          label-position="top"
+          placeholder="**********"
+          type="password"
+          class="popupinput"
+        ></el-input>
       </el-form-item>
       <el-form-item class="btns">
         <el-button class="full" plain @click="resetForm('ruleForm')"
@@ -47,10 +33,10 @@
 <style lang="less" scoped>
 .logpop {
   background-color: rgba(255, 255, 255, 0.6);
-  padding: 8px 30px 16px;
+  padding: 14px 40px 20px;
   border-radius: 6px;
   box-sizing: border-box;
-  width: 420px;
+  width: 480px;
   top: 44%;
   .popupinput {
     :deep(.el-input__inner) {
@@ -82,8 +68,9 @@
 }
 </style>
 <script>
-import { setLocalStorage } from "../utils/tools.js";
+import { setCookie, getCookie, isSupportLocalCookie } from "../utils/tools.js";
 import API from "../data/api.js";
+var isSupportCookie = isSupportLocalCookie();
 export default {
   data() {
     var validateName = (rule, value, callback) => {
@@ -124,16 +111,13 @@ export default {
               let { officeid } = message[0];
               if (this.ruleForm.rememberChecked) {
                 // 写入token
+                setCookie("accessToken", accessToken, 1);
                 let { officeid } = message[0];
-                setLocalStorage("accessToken", accessToken);
-                setLocalStorage("testuser", message[0]);
-                setLocalStorage("testoffice", officeid); //保存7天
-                setLocalStorage("testrember", true);
+                console.log("testoffice", officeid, 7); //保存7天
               }
-              setLocalStorage("testLogin", true);
 
               this.$message.info("Login successfully!");
-              this.$emit("poploginHandler", true, accessToken, officeid);
+              this.$emit("login", true, accessToken, officeid);
             } else {
               this.$message.error(message);
             }
@@ -146,6 +130,12 @@ export default {
     resetForm(formName) {
       this.$refs[formName].resetFields();
     },
+  },
+  mounted() {
+    // 读取cookie
+    if (isSupportCookie) {
+      this.ruleForm.testname = getCookie("testname");
+    }
   },
 };
 </script>

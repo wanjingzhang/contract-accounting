@@ -41,6 +41,13 @@ html,
   transform: translate(-50%, -50%);
 }
 
+.abRC {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(0, -50%);
+}
+
 .abLT {
   position: absolute;
   left: 0;

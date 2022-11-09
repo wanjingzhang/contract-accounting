@@ -1,4 +1,17 @@
-// 设置cookie
+// 1. 设置localStorage
+export function setLocalStorage(key, value) {
+  localStorage.setItem(key, value);
+}
+
+export function getLocalStorage(key) {
+  return localStorage.getItem(key);
+}
+
+export function clearLocalStorage() {
+  localStorage.clear();
+}
+
+// 2. 设置cookie
 
 /**
  * 设置cookie值
@@ -39,7 +52,7 @@ export function getCookie(name) {
  * @param {String} name cookie名称
  */
 export function clearCookie(name) {
-  this.setCookie(name, "", -1); //清除cookie
+  setCookie(name, "", -1); //清除cookie
 }
 
 /**

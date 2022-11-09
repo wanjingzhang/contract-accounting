@@ -1,6 +1,6 @@
 // 1、导入axios
 import axios from "axios";
-import { getCookie } from "@/utils/tools";
+import { getLocalStorage } from "@/utils/tools";
 
 // 2、配置请求根路径
 // axios.defaults.baseURL = "https://kcapi.test.com";
@@ -10,13 +10,23 @@ import { getCookie } from "@/utils/tools";
 const API = {};
 // 配置请求拦截器
 
-API.setToken = async () => {
+API.setToken = async (tok) => {
   axios.interceptors.request.use((config) => {
     // 调用Loading组件的service()方法，创建Loading组件的实例，并全屏展示 loading 效果
-
     // 配置 Token 认证
-    let token = getCookie("accessToken");
-    if (token != undefined && token.length > 0) {
+    let login = getLocalStorage("testLogin");
+    let token = tok || getLocalStorage("accessToken");
+    if (login == null) {
+      config.headers["content-type"] = "application/json;charset=utf-8";
+      if (
+        config.headers.Authorization != undefined &&
+        config.headers.Authorization.length > 0
+      ) {
+        delete config.headers.Authorization;
+      }
+      console.log(config.headers);
+      //  clear cookie
+    } else if (login == "true" && config.headers.Authorization == undefined) {
       config.headers.Authorization = "Bearer " + token;
       config.headers["content-type"] =
         "application/x-www-form-urlencoded;charset=UTF-8";
@@ -33,7 +43,6 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.log(error.response);
     if (error.response) {
       if (error.response.status == 401) {
         console.log("登录");
@@ -41,16 +50,22 @@ axios.interceptors.response.use(
       } else if (error.response.status == 403) {
         // 提示无权限等
         console.log("无权");
-      } else {
+      } else if (error.response.status == 400) {
+        // 其他错误处理
+        console.log("错误");
+      } else if (error.response.status == 404) {
         // 其他错误处理
         console.log("错误");
       }
+
+      return error.response;
     }
-    return { data: [] };
+    return { data: [], code: error.response.status };
   }
 );
 // 1. 获取office列表
-API.Offices = async () => {
+API.Offices = async (token) => {
+  API.setToken(token);
   const { data: res } = await axios.get("/dbapi/api/invoiceoffice");
   return res;
 };
