@@ -48,6 +48,12 @@ html,
   transform: translate(0, -50%);
 }
 
+.abRT {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
 .abLT {
   position: absolute;
   left: 0;

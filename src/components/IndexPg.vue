@@ -54,7 +54,7 @@ export default {
   },
   methods: {
     // mobile show tabs
-    showTabs() {
+    showTabs: _.debounce(function () {
       if (!this.show) {
         this.showClass = " show";
       } else {
@@ -62,7 +62,7 @@ export default {
       }
       this.show = !this.show;
       this.$refs.tabs.showMenu(this.show);
-    },
+    }, 1200),
     hideMenu(flag) {
       this.showClass = flag;
       this.show = false;

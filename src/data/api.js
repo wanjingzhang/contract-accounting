@@ -1,6 +1,6 @@
 // 1、导入axios
 import axios from "axios";
-import { getLocalStorage } from "@/utils/tools";
+import { getLocalStorage, clearLocalStorage } from "@/utils/tools";
 
 // 2、配置请求根路径
 // axios.defaults.baseURL = "https://kcapi.test.com";
@@ -24,7 +24,6 @@ API.setToken = async (tok) => {
       ) {
         delete config.headers.Authorization;
       }
-      console.log(config.headers);
       //  clear cookie
     } else if (login == "true" && config.headers.Authorization == undefined) {
       config.headers.Authorization = "Bearer " + token;
@@ -44,6 +43,7 @@ axios.interceptors.response.use(
   },
   (error) => {
     if (error.response) {
+      clearLocalStorage();
       if (error.response.status == 401) {
         console.log("登录");
         // 这种情况一般调到登录页
@@ -57,7 +57,6 @@ axios.interceptors.response.use(
         // 其他错误处理
         console.log("错误");
       }
-
       return error.response;
     }
     return { data: [], code: error.response.status };

@@ -14,10 +14,18 @@
       </div>
     </div>
 
+    <!-- 修改密码 -->
+    <ChangePop
+      v-if="cgPop"
+      class="abCC"
+      @changedpwd="ChangePwdHandler"
+      @backnormal="BacknormalHandler"
+    />
+
     <!-- Login 登录 -->
     <LoginPop
       ref="pop"
-      v-if="token.length == 0"
+      v-if="cgPop == false && token.length == 0"
       class="abCC"
       @poploginHandler="poploginHandler"
     />
@@ -26,26 +34,28 @@
       ref="indx"
       :token="token"
       :officeid="office"
-      v-else-if="token.length > 0"
+      v-show="cgPop == false && token.length > 0"
       @needLogin="goLoginHandler"
     />
 
     <!-- 按钮组 -->
-    <div class="btnsGroup abRC" v-if="token.length > 0">
+    <div class="btnsGroup abRC" v-if="firstLogin == false && token.length > 0">
       <div class="full bgc abLT"></div>
-      <div class="icon icon1">
+      <div class="icon icon1" @click="showChangePwdHandler">
         <div class="item"></div>
         <span class="text">Change password</span>
       </div>
       <div class="icon icon2" @click="quitHandler">
         <div class="item"></div>
-        <span class="text">Quit</span>
+        <span class="text">Quick Logout</span>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Loading } from "element-ui";
+import _ from "lodash";
 import API from "./data/api";
 import {
   clearLocalStorage,
@@ -54,25 +64,32 @@ import {
 } from "./utils/tools.js";
 import IndexPgVue from "./components/IndexPg.vue";
 import LoginPop from "./components/LogPop.vue";
-import keyimg from "./assets/key.svg";
-import quitimg from "./assets/quit.svg";
+import ChangePop from "./components/changePop.vue";
+
 import img1 from "./assets/btns/1.jpg";
 import img2 from "./assets/btns/2.jpg";
 import img3 from "./assets/btns/3.jpg";
 import img4 from "./assets/btns/4.jpg";
 import img5 from "./assets/btns/5.jpg";
 const imgs = [img1, img2, img3, img4, img5];
-const btns = [keyimg, quitimg];
+
+// 声明变量，用来存储Loading组件的实例对象
+let loadingInstance = null;
+loadingInstance = Loading.service({
+  fullscreen: true,
+  background: "transparent",
+});
 
 export default {
   name: "App",
   data: () => {
     return {
       token: "",
-      office: "_",
+      office: "",
       imgs: imgs,
-      btns: btns,
       projectLength: 5,
+      cgPop: false,
+      firstLogin: false,
     };
   },
   methods: {
@@ -82,27 +99,41 @@ export default {
         this.successLogin(token, office);
       }
     },
+    // 打开修改密码弹框
+    showChangePwdHandler: _.debounce(function () {
+      this.cgPop = true;
+    }, 500),
+    // 已经修改好了密码
+    ChangePwdHandler() {
+      this.firstLogin = false;
+      this.cgPop = false;
+      this.token = getLocalStorage("accessToken");
+    },
+    // 不想修改密码了
+    BacknormalHandler() {
+      this.firstLogin = false;
+      this.cgPop = false;
+    },
     goLoginHandler() {
       this.token = "";
       this.office = "";
       clearLocalStorage();
     },
     successLogin(token, office) {
-      this.token = token;
       API.setToken();
       this.Offices(office, token);
     },
-    quitHandler() {
+    quitHandler: _.debounce(function () {
       API.Logout((res) => {
         if (res.code == 200) {
-          console.log("quit");
           setLocalStorage("testLogin", false);
 
           this.$message.info(res.message);
           this.goLoginHandler();
+          this.BacknormalHandler();
         }
       });
-    },
+    }, 500),
     // 获取全球办公室列表
     async Offices(office, token) {
       let data = await API.Offices(token);
@@ -110,15 +141,26 @@ export default {
       if (data == "") {
         this.token = "";
       } else {
-        this.token = token;
-        // 等待更新office
-        setTimeout(() => {
-          this.office = office;
-          setLocalStorage("testLogin", true);
-        }, 600);
+        // 判断是否初次登录，需要修改密码
+        let { ca_firstlogon } = JSON.parse(getLocalStorage("testuser"));
+        if (ca_firstlogon == "Y") {
+          // 需要修改密码
+          this.cgPop = true;
+          this.firstLogin = true;
+          this.$message("Please reset your password, before you are use it!");
+        } else {
+          this.firstLogin = false;
+          this.token = token;
+          // 等待更新office
+          setTimeout(() => {
+            this.office = office;
+            setLocalStorage("testLogin", true);
+          }, 600);
+        }
       }
     },
   },
+
   async mounted() {
     // get storage
     let accessToken = getLocalStorage("accessToken");
@@ -129,6 +171,8 @@ export default {
       // 测试API调用
       this.Offices(office, accessToken);
     }
+
+    loadingInstance.close();
   },
   unmounted() {
     if (!getLocalStorage("testrember")) {
@@ -138,6 +182,7 @@ export default {
   components: {
     IndexPgVue,
     LoginPop,
+    ChangePop,
   },
 };
 </script>
@@ -150,7 +195,7 @@ export default {
   text-align: center;
   color: #2c3e50;
   opacity: 0;
-  animation: show 1s 1s forwards;
+  animation: show 1s 0.5s forwards;
 
   letter-spacing: 0.5px;
   position: relative;
@@ -241,6 +286,7 @@ export default {
       display: flex;
       flex-direction: row;
       cursor: pointer;
+      user-select: none;
       .item {
         width: 30px;
         height: 30px;
@@ -260,24 +306,26 @@ export default {
 
     .icon1 {
       .item {
-        margin: 10px 16px;
-        background: url(./assets/key.svg) no-repeat;
+        margin: 10px 6px 10px 16px;
+        background: url(./assets/icons.svg) no-repeat;
+        background-position: 0 0;
       }
       &:hover {
         .item {
-          background: url(./assets/key2.svg) no-repeat;
+          background-position: -30px 0;
         }
       }
     }
 
     .icon2 {
       .item {
-        margin: 11px 19px 0 13px;
-        background: url(./assets/quit.svg) no-repeat;
+        margin: 11px 10px 0 13px;
+        background: url(./assets/icons.svg) no-repeat;
+        background-position: 0px -30px;
       }
       &:hover {
         .item {
-          background: url(./assets/quit2.svg) no-repeat;
+          background-position: -30px -30px;
         }
       }
     }
@@ -516,6 +564,60 @@ export default {
       .el-input__inner {
         font-size: 0.8rem;
         width: 148px;
+      }
+    }
+
+    .logpop {
+      width: 90% !important;
+      padding: 10px 16px;
+      .el-form-item__label {
+        font-size: 12px;
+      }
+      .popupinput {
+        .el-input__inner {
+          font-size: 12px;
+          line-height: 20px;
+          border-radius: 0 !important;
+        }
+      }
+      .el-form-item__content {
+        line-height: 26px;
+        .el-link--inner,
+        .el-checkbox__label {
+          font-size: 12px;
+        }
+        button {
+          line-height: 5px;
+          span {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .btnsGroup {
+      top: 10%;
+      z-index: 6;
+      width: 200px !important;
+      height: 80px !important;
+      &:hover {
+        transform: translateX(157px) !important;
+      }
+      .icon {
+        height: 40px !important;
+      }
+      .icon1 {
+        .item {
+          margin: 5px 4px 10px 13px !important;
+        }
+      }
+      .icon2 {
+        .item {
+          margin: 5px 4px 10px 8px !important;
+        }
+      }
+      &:after {
+        top: 38px !important;
+        background-color: #a3a3a3 !important;
       }
     }
   }

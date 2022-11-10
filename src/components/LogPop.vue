@@ -5,7 +5,7 @@
         <el-input
           v-model="ruleForm.testname"
           label-position="top"
-          placeholder="please input user name"
+          placeholder="Please input user name"
           autoComplete="off"
           class="popupinput"
         ></el-input>
@@ -17,9 +17,8 @@
           placeholder="**********"
           class="popupinput"
           auto-complete="new-password"
-          readonly
-          onfocus="this.removeAttribute('readonly');"
           show-password
+          @keyup.enter.native="submitForm('ruleForm')"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -59,6 +58,7 @@
       color: #000000;
       background: unset !important;
       font-size: 26px;
+      border-radius: 0;
     }
   }
 
@@ -84,6 +84,7 @@
 <script>
 import { setLocalStorage } from "../utils/tools.js";
 import API from "../data/api.js";
+import _ from "lodash";
 export default {
   data() {
     var validateName = (rule, value, callback) => {
@@ -113,7 +114,7 @@ export default {
     };
   },
   methods: {
-    submitForm(formName) {
+    submitForm: _.debounce(function (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           let { testname, testpass } = this.ruleForm;
@@ -126,10 +127,11 @@ export default {
                 // 写入token
                 let { officeid } = message[0];
                 setLocalStorage("accessToken", accessToken);
-                setLocalStorage("testuser", message[0]);
+                // message[0].ca_firstlogon = "Y";
                 setLocalStorage("testoffice", officeid); //保存7天
                 setLocalStorage("testrember", true);
               }
+              setLocalStorage("testuser", JSON.stringify(message[0]));
               setLocalStorage("testLogin", true);
 
               this.$message.info("Login successfully!");
@@ -142,10 +144,10 @@ export default {
           return false;
         }
       });
-    },
-    resetForm(formName) {
+    }, 1000),
+    resetForm: _.debounce(function (formName) {
       this.$refs[formName].resetFields();
-    },
+    }, 1000),
   },
 };
 </script>
